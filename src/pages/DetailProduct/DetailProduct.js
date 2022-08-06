@@ -17,7 +17,7 @@ function DetailProduct({ products, handleAddProducts }) {
           const { data } = await axios.get(
             `http://localhost:8000/product/${params.id}`
           );
-          setProductDetail(data.found);
+          setProductDetail(data.product);
         } catch (error) {
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER,

@@ -18,6 +18,7 @@ export default function defaultLayout({ children, cartItems }) {
             </Link>
           </div>
         )}
+        
       </div>
       <Footer />
     </div>
