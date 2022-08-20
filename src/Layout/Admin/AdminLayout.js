@@ -1,5 +1,5 @@
 import React from "react";
-import HeaderAdmin from "../../pages/Admin/Header/HeaderAdmin";
+import HeaderAdmin from "../../pages/Admin/Header/Header";
 import Sidebar from "../../pages/Admin/Sidebar/Sidebar";
 import style from './AdminLayout.module.css'
 

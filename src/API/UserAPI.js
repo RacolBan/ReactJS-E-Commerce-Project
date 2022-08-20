@@ -21,7 +21,7 @@ function UserAPI() {
       const getUser = async () => {
         try {
           const { data } = await axios.get(
-            `http://localhost:8000/user/${login.accountId}/getInfor`,
+            `${process.env.REACT_APP_SERVER_URL}/user/${login.accountId}/getInfor`,
             { headers: { "access-token": "Bearer " + login.accesstoken } }
           );
           if (data.inforUser.avatar === null) {
@@ -58,9 +58,11 @@ function UserAPI() {
           }
           setIsLogged(true);
         } catch (error) {
-          toast.error(error.response.data.message, {
+          localStorage.clear();
+          toast.error("session out, please login again", {
             position: toast.POSITION.TOP_CENTER,
           });
+
         }
       };
 

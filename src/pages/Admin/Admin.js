@@ -13,8 +13,10 @@ function Admin() {
         <h1 className={style.title}>Information</h1>
         <div className={style.item}>
           <img
-            src={`http://localhost:8000/${user.avatar}`}
-            alt=""
+            src={user.avatar === null
+              ? "../../../../images/Avatar/avatar.jpg"
+              : `${process.env.REACT_APP_SERVER_URL}/${user.avatar}`}
+            alt="avatar"
             className={style.itemImg}
           />
           <div className={style.details}>

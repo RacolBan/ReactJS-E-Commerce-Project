@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import useCustomRouter from "../../Hooks/useCustomRouter";
 import style from './SelectManu.module.css'
 
-const SelectManu = ({ page, categoryId,price }) => {
+const SelectManu = ({ page, categoryId,sort }) => {
   const [manufacture, setManufacture] = useState([]);
   const {pushQuery} = useCustomRouter();
 
@@ -12,7 +12,7 @@ const SelectManu = ({ page, categoryId,price }) => {
     const getManufacture = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/manufacture/category/${categoryId}`
+          `${process.env.REACT_APP_SERVER_URL}/manufacture/category/${categoryId}`
         );
         setManufacture(data);
       } catch (error) {
@@ -25,7 +25,7 @@ const SelectManu = ({ page, categoryId,price }) => {
   }, []);
   const handleChange = (e) => {
     const { value } = e.target;
-    pushQuery({page,manufacture:value,price})
+    pushQuery({page,manufacture:value,sort})
   };
 
   return (

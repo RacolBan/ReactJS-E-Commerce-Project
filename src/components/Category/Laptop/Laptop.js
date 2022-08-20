@@ -6,10 +6,12 @@ import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
 import { GlobalState } from "../../../GlobalState";
 
-function Apple({handleAddProducts}) {
+function Laptop({handleAddProducts}) {
+  const state = useContext(GlobalState);
+  const productsLaptop = state.ProductsLaptop.productsLaptop[0];
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -22,7 +24,7 @@ function Apple({handleAddProducts}) {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          infinite: true,
+          infinite: false,
           dots: false
         }
       },
@@ -43,8 +45,6 @@ function Apple({handleAddProducts}) {
       }
     ]
   };
-  const state = useContext(GlobalState);
-  const productsLaptop = state.ProductsLaptop.productsLaptop[0];
   return (
     <div className={style.wrapper}>
       <div className={style.head}>
@@ -60,19 +60,20 @@ function Apple({handleAddProducts}) {
           <div className={style.item} key={index}>
             <Link to={`/detail/${product.id}`} className={style["item-image"]}>
               <img
-                src={`http://localhost:8000/${product.image}`}
+                src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`}
                 alt="Laptop"
               />
             </Link>
             <span className={style["item-manufactory"]}>
-              {product.manufactureId === 2 && (
+              {product.nameManufacture === "Asus" && (
                 <img src="../../../images/Manufactory/asus.PNG" alt="" />
               )}
-              {product.manufactureId === 1 && (
+              {product.nameManufacture === "Dell" && (
                 <img src="../../../images/Manufactory/dell.PNG" alt="" />
               )}
             </span>
             <h4 className={style["item-name"]}>{product.name}</h4>
+            <span className={style["item-description"]}>{product.description}</span>
             <span className={style["item-price"]}>${product.price}</span>
             <span className={style["btn-addCart"]} onClick={()=>{handleAddProducts(product)}}>Add To Cart</span>
           </div>
@@ -82,4 +83,4 @@ function Apple({handleAddProducts}) {
   );
 }
 
-export default Apple;
+export default Laptop;

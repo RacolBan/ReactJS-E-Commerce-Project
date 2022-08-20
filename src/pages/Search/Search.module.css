@@ -65,11 +65,19 @@
 
 .search .item-name {
   margin: 10px 0;
+  overflow: hidden;
+  display: block;
+}
+
+.search .item-description {
+  margin: 10px 0;
   height: 55px;
   overflow: hidden;
+  display: block;
 }
 
 .search .item-price {
+  display: block;
   font-size: 20px;
   font-weight: 600;
   color: #c8191f;

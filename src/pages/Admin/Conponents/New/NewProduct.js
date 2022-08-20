@@ -33,7 +33,7 @@ function NewProduct({ inputs, title, isFile,setLoading }) {
     newProduct.append("nameCategory", info.category);
     try {
       const {data} = await axios.post(
-        `http://localhost:8000/product`,
+        `${process.env.REACT_APP_SERVER_URL}/product`,
         newProduct,
         {
           headers: {

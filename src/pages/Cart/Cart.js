@@ -5,18 +5,28 @@ import { toast } from "react-toastify";
 import { GlobalState } from "../../GlobalState";
 import style from "./Cart.module.css";
 
-function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
+function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
   const [total, setTotal] = useState(0);
   const [method, setMethod] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const login = JSON.parse(localStorage.getItem("login")) || null;
   const state = useContext(GlobalState);
   const user = state.UserAPI.user[0];
+  useEffect(() => {
+    if (login) {
+      setFullName(`${user.firstname} ${user.lastname}`);
+      setAddress(user.address);
+      setPhoneNumber(user.phone);
+    }
+  }, [user]);
 
   useEffect(() => {
     const getTotal = () => {
-      const tt = cartItems.reduce((prev, item) => {
-        return prev + item.price * item.quantity;
+      const tt = cartItems?.reduce((prev, item) => {
+        return prev + item.price * item.quantityProduct;
       }, 0);
       setTotal(tt);
     };
@@ -26,7 +36,7 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
   const increase = (id) => {
     cartItems.forEach((element) => {
       if (element.id === id) {
-        element.quantity += 1;
+        element.quantityProduct += 1;
       }
     });
     setCartItems([...cartItems]);
@@ -35,9 +45,9 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
   const decrease = (id) => {
     cartItems.forEach((element) => {
       if (element.id === id) {
-        element.quantity === 1
-          ? (element.quantity = 1)
-          : (element.quantity -= 1);
+        element.quantityProduct === 1
+          ? (element.quantityProduct = 1)
+          : (element.quantityProduct -= 1);
       }
     });
     setCartItems([...cartItems]);
@@ -49,7 +59,7 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
         setLoading(true);
         try {
           const { data } = await axios.delete(
-            `http://localhost:8000/cart/users/${login.userId}/products/${id}`
+            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}/product/${id}`
           );
           cartItems.forEach((item, index) => {
             if (item.id === id) {
@@ -58,20 +68,44 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
           });
           setLoading(false);
           setCartItems([...cartItems]);
+          localStorage.setItem("cartItems", JSON.stringify(cartItems));
           toast.success(data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
         } catch (error) {
-          setLoading(false)
+          setLoading(false);
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
         }
       }
+    } else {
+      if (window.confirm("Do you want to delete this product?")) {
+        const newCartItems = cartItems.filter((item) => {
+          return item.id != id;
+        });
+        setCartItems(newCartItems);
+        localStorage.setItem("cartItems", JSON.stringify(newCartItems));
+        toast.success("Remove your cart successfully", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
     }
   };
 
   const handlePayment = async () => {
+    if (!login) {
+      toast.warning("Please login before taking this action", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+    if (!method) {
+      toast.warning("Please select method payment", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
     setLoading(true);
     const newPayment = {
       products: cartItems,
@@ -79,28 +113,38 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
       totalPrice: total,
       method: method,
       email: user.email,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      address: address,
     };
     try {
-      const { data } = await axios.post(
-        `http://localhost:8000/payment`,
-        newPayment
-      );
-      setIsPm(!isPm);
-      setLoading(false);
-      toast.success(data.message, {
-        position: toast.POSITION.TOP_CENTER,
-      });
+      if (method === "Ship Cod") {
+        const { data } = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/payment`,
+          newPayment
+        );
+        setLoading(false);
+        setIsPm(!isPm);
+        toast.success(data.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      } else {
+        const { data } = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/api/stripe/create-checkout-seasion`,
+          newPayment
+        );
+        setIsPm(!isPm);
+        setLoading(false);
+        window.location.href = data.url;
+      }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       toast.error(error.response.data.message, {
         position: toast.POSITION.TOP_CENTER,
       });
     }
   };
 
-  const handleChange = (e) => {
-    setMethod(e.target.value);
-  };
   return (
     <div className={style.cart}>
       {cartItems.length > 0 ? (
@@ -110,7 +154,7 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
               <div className={`${style["list-orders-item"]} `} key={cart.id}>
                 <div className={`${style["list-orders-item-img"]} `}>
                   <img
-                    src={`http://localhost:8000/${cart.image}`}
+                    src={`${process.env.REACT_APP_SERVER_URL}/${cart.image}`}
                     alt="image"
                   />
                 </div>
@@ -134,7 +178,9 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
                     >
                       -
                     </span>
-                    <span className={style["quantity"]}>{cart.quantity}</span>
+                    <span className={style["quantity"]}>
+                      {cart.quantityProduct}
+                    </span>
                     <span
                       className={style["quantity-change"]}
                       onClick={() => {
@@ -165,32 +211,59 @@ function Cart({ cartItems, setCartItems, setIsPm, isPm, setLoading }) {
             <form>
               <input
                 type="radio"
-                id="visa"
+                id="cart"
                 name="payMethod"
-                value="Visa"
-                onChange={handleChange}
+                value="Visa/Master Cart"
+                onChange={(e) => {
+                  setMethod(e.target.value);
+                }}
               />
-              <label htmlFor="visa">Visa</label>
-              <input
-                type="radio"
-                id="master"
-                name="payMethod"
-                value="Master"
-                onChange={handleChange}
-              />
-              <label htmlFor="master">Master Cart</label>
+              <label htmlFor="cart">Visa/Master Cart</label>
               <input
                 type="radio"
                 id="cod"
                 name="payMethod"
-                value="Ship COD"
-                onChange={handleChange}
+                value="Ship Cod"
+                onChange={(e) => {
+                  setMethod(e.target.value);
+                }}
               />
               <label htmlFor="cod">Ship COD</label>
             </form>
           </div>
-          <div className={style.checkout}>
-            <span onClick={handlePayment}>Purchase</span>
+          {method === "Ship Cod" ? (
+            <div className={style["info-payment"]}>
+              <h2>Customer Information</h2>
+              <form>
+                <input
+                  placeholder="Enter Full Name"
+                  spellCheck="false"
+                  value={fullName}
+                  onChange={(e) => {
+                    setFullName(e.target.value);
+                  }}
+                />
+                <input
+                  placeholder="Enter Phone Number"
+                  spellCheck="false"
+                  value={phoneNumber}
+                  onChange={(e) => {
+                    setPhoneNumber(e.target.value);
+                  }}
+                />
+                <input
+                  placeholder="Enter Address"
+                  spellCheck="false"
+                  value={address}
+                  onChange={(e) => {
+                    setAddress(e.target.value);
+                  }}
+                />
+              </form>
+            </div>
+          ) : null}
+          <div className={style.checkout} onClick={handlePayment}>
+            <span>Purchase</span>
           </div>
         </div>
       ) : (

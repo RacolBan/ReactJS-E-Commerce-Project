@@ -26,7 +26,7 @@ function ChangePassword({setLoading}) {
     }
     try {
       await axios.put(
-        `http://localhost:8000/account/change/${user.accountId}`,
+        `${process.env.REACT_APP_SERVER_URL}/account/change/${user.accountId}`,
         updatePassword,
         { headers: { "access-token": "Bearer " + user.accesstoken } }
       );
@@ -52,7 +52,7 @@ function ChangePassword({setLoading}) {
                 src={
                   user.avatar === null
                     ? "./images/Avatar/avatar.jpg"
-                    : `http://localhost:8000/${user.avatar}`
+                    : `${user.avatar}`
                 }
                 alt="avatar"
               />

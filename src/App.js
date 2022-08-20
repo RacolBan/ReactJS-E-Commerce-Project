@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DataProvider } from "./GlobalState";
-import defaultLayout from "./Layout/DefaultLayout/DefaultLayout";
+import DefaultLayout from "./Layout/DefaultLayout/DefaultLayout";
 import Admin from "./pages/Admin/Admin";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
@@ -45,6 +45,7 @@ import ProductsAll from "./API/ProductsAll";
 import Search from "./pages/Search/Search";
 import ListOrders from "./pages/Admin/Conponents/List/ListOrders";
 import FadeLoader from "react-spinners/FadeLoader";
+import Checkout from "./components/Checkout/Checkout";
 
 function App() {
   const [categoryAll, setCategoryAll] = useState([]);
@@ -53,25 +54,43 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [isPm, setIsPm] = useState(false);
   const login = JSON.parse(localStorage.getItem("login")) || null;
-
+  const [user, setUser] = useState(null)
   const override = {
     display: "block",
     margin: "0 auto",
   };
-  useEffect(() => {}, [loading]);
+  useEffect(() => { }, [loading]);
 
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     try {
+  //       const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/auth/login/success`, {
+  //         credentials: "include",
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //           "Access-Control-Allow-Credentials": true,
+  //         },
+  //       })
+  //       console.log(data)
+  //       setUser(data.user)
+  //     } catch (error) {
+  //       toast.error(error.response.data.message, {
+  //         position: toast.POSITION.TOP_CENTER,
+  //       });
+  //     }
+  //     getUser();
+  //   }
+  // }, []);
   useEffect(() => {
     if (login) {
       const getCart = async () => {
         try {
           const { data } = await axios.get(
-            `http://localhost:8000/cart/users/${login.userId}`
+            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}`
           );
-          data.map((item) => {
-            item.quantity = 1;
-            return item;
-          });
-          setCartItems(data);
+          setCartItems(data.newCarts);
+          localStorage.setItem("cartItems", JSON.stringify(data.newCarts));
         } catch (error) {
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER,
@@ -79,24 +98,51 @@ function App() {
         }
       };
       getCart();
+    } else {
+      if (!JSON.parse(localStorage.getItem("cartItems"))) {
+        return;
+      }
+      setCartItems(JSON.parse(localStorage.getItem("cartItems")));
     }
   }, [isPm]);
-
   const handleAddProducts = async (product) => {
     if (login) {
-      const checkExist = cartItems.find((item) => {
+      const findExxist = cartItems.findIndex((item) => {
         return item.id === product.id;
       });
-      if (checkExist) {
-        return toast.warning("This product has been added to your cart", {
-          position: toast.POSITION.TOP_CENTER,
-        });
+      if (findExxist >= 0) {
+        try {
+          const { data } = await axios.put(
+            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}/product/${product.id}`
+          );
+
+          cartItems[findExxist] = {
+            ...cartItems[findExxist],
+            quantityProduct: data.newQuantity,
+          };
+          setCartItems([...cartItems]);
+          localStorage.setItem("cartItems", JSON.stringify(cartItems));
+          toast.info("Increased product quantity", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        } catch (error) {
+          toast.error(error.response.res.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
       } else {
+        const quantity = {
+          quantityProduct: 1,
+        };
         try {
           await axios.post(
-            `http://localhost:8000/cart/users/${login.userId}/products/${product.id}`
+            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}/product/${product.id}`,
+            quantity
           );
-          setCartItems([...cartItems, { ...product, quantity: 1 }]);
+          setCartItems([...cartItems, { ...product, quantityProduct: 1 }]);
+          toast.success("Product added to cart", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         } catch (error) {
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER,
@@ -104,19 +150,48 @@ function App() {
         }
       }
     } else {
-      toast.warning("Please login before taking this action");
+      const findExxist = cartItems.findIndex((item) => {
+        return item.id === product.id;
+      });
+      if (findExxist >= 0) {
+        try {
+          cartItems[findExxist] = {
+            ...cartItems[findExxist],
+            quantityProduct: cartItems[findExxist].quantityProduct + 1,
+          };
+          setCartItems([...cartItems]);
+          localStorage.setItem("cartItems", JSON.stringify(cartItems));
+          toast.info("Increased product quantity", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        } catch (error) {
+          toast.error(error.response.res.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
+      } else {
+        let item = { ...product, quantityProduct: 1 };
+        cartItems.push(item);
+        setCartItems([...cartItems]);
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        toast.success("Product added to cart", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
     }
   };
 
   useEffect(() => {
     const getCategory = async () => {
-      const { data } = await axios.get(`http://localhost:8000/category`);
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/category`
+      );
       setCategoryAll(data);
     };
     getCategory();
   }, []);
 
-  const Layout = defaultLayout;
+  const Layout = DefaultLayout;
   const LayoutAdmin = AdminLayout;
   return (
     <DataProvider>
@@ -133,7 +208,7 @@ function App() {
             <Route
               path="/"
               element={
-                <Layout cartItems={cartItems} >
+                <Layout cartItems={cartItems} setCartItems={setCartItems}>
                   <Home
                     categoryList={categoryAll}
                     handleAddProducts={handleAddProducts}
@@ -145,7 +220,15 @@ function App() {
               path="/register"
               element={
                 <Layout>
-                  <Register setLoading={setLoading}/>
+                  <Register setLoading={setLoading} />
+                </Layout>
+              }
+            />
+            <Route
+              path="/checkout-success"
+              element={
+                <Layout>
+                  <Checkout />
                 </Layout>
               }
             />
@@ -153,7 +236,7 @@ function App() {
               path="/login"
               element={
                 <Layout>
-                  <Login setLoading={setLoading}/>
+                  <Login setLoading={setLoading} />
                 </Layout>
               }
             />
@@ -194,7 +277,7 @@ function App() {
               path="/search"
               element={
                 <Layout cartItems={cartItems}>
-                  <Search handleAddProducts={handleAddProducts}/>
+                  <Search handleAddProducts={handleAddProducts} />
                 </Layout>
               }
             />
@@ -202,7 +285,7 @@ function App() {
               path="/profile"
               element={
                 <Layout cartItems={cartItems}>
-                  <Profile setLoading={setLoading}/>
+                  <Profile setLoading={setLoading} />
                 </Layout>
               }
             />
@@ -210,7 +293,7 @@ function App() {
               path="/changepass"
               element={
                 <Layout>
-                  <ChangePassword setLoading={setLoading}/>
+                  <ChangePassword setLoading={setLoading} />
                 </Layout>
               }
             />
@@ -218,7 +301,7 @@ function App() {
               path="/forgot"
               element={
                 <Layout>
-                  <ForgotPassword setLoading={setLoading}/>
+                  <ForgotPassword setLoading={setLoading} />
                 </Layout>
               }
             />
@@ -226,7 +309,7 @@ function App() {
               path="/reset/:tempToken"
               element={
                 <Layout>
-                  <Reset setLoading={setLoading}/>
+                  <Reset setLoading={setLoading} />
                 </Layout>
               }
             />
@@ -243,7 +326,11 @@ function App() {
                 index
                 element={
                   <LayoutAdmin>
-                    <ListUsers columns={columnsUsers} title="Users" setLoading={setLoading}/>
+                    <ListUsers
+                      columns={columnsUsers}
+                      title="Users"
+                      setLoading={setLoading}
+                    />
                   </LayoutAdmin>
                 }
               />
@@ -264,7 +351,11 @@ function App() {
                 path="view/:id"
                 element={
                   <LayoutAdmin>
-                    <ViewUser title="Update User" isFile={true} setLoading={setLoading}/>
+                    <ViewUser
+                      title="Update User"
+                      isFile={true}
+                      setLoading={setLoading}
+                    />
                   </LayoutAdmin>
                 }
               />
@@ -274,7 +365,11 @@ function App() {
                 index
                 element={
                   <LayoutAdmin>
-                    <ListProducts columns={columnsProducts} title="Products" setLoading={setLoading}/>
+                    <ListProducts
+                      columns={columnsProducts}
+                      title="Products"
+                      setLoading={setLoading}
+                    />
                   </LayoutAdmin>
                 }
               />
@@ -295,7 +390,11 @@ function App() {
                 path="view/:id"
                 element={
                   <LayoutAdmin>
-                    <ViewProduct title="Update Product" isFile={true} setLoading={setLoading}/>
+                    <ViewProduct
+                      title="Update Product"
+                      isFile={true}
+                      setLoading={setLoading}
+                    />
                   </LayoutAdmin>
                 }
               />
@@ -331,7 +430,11 @@ function App() {
                 path="view/:id"
                 element={
                   <LayoutAdmin>
-                    <ViewCategory title="Update Category" isFile={false} setLoading={setLoading}/>
+                    <ViewCategory
+                      title="Update Category"
+                      isFile={false}
+                      setLoading={setLoading}
+                    />
                   </LayoutAdmin>
                 }
               />
@@ -380,7 +483,7 @@ function App() {
                 index
                 element={
                   <LayoutAdmin>
-                    <ListOrders columns={columnsOrder} title="Order" setLoading={setLoading}/>
+                    <ListOrders columns={columnsOrder} title="Order" />
                   </LayoutAdmin>
                 }
               />

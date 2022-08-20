@@ -14,7 +14,7 @@ function ForgotPassword({ isTempToken,setLoading }) {
     };
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/account/forgot_password",
+        `${process.env.REACT_APP_SERVER_URL}/account/forgot_password`,
         dataSend
       );
       const tempToken = {

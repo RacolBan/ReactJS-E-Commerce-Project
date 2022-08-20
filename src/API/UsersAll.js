@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GlobalState } from "../GlobalState";
 
+
 function UsersAll() {
   const state = useContext(GlobalState);
   const [isAdmin, setIsAdmin] = state.UserAPI.isAdmin;
@@ -10,7 +11,7 @@ function UsersAll() {
   const [usersAll, setUsersAll] = useState([]);
   const getUsers = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/user/getAll`, {
+      const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/getAll`, {
         headers: { "access-token": "Bearer " + login.accesstoken },
       });
       setUsersAll(data);

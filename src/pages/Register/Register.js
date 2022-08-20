@@ -155,7 +155,7 @@ function Register({setLoading}) {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/user/accounts/creatProfile",
+        `${process.env.REACT_APP_SERVER_URL}/user/accounts/creatProfile`,
         {
           ...user,
         }

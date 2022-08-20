@@ -12,7 +12,7 @@ function ListUsers({ columns, title,setLoading }) {
   const getUsers = async () => {
     try {
       if (login) {
-        const { data } = await axios.get(`http://localhost:8000/user/getAll`, {
+        const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/getAll`, {
           headers: { "access-token": "Bearer " + login.accesstoken },
         });
         setUsersAll(data);
@@ -58,7 +58,7 @@ function ListUsers({ columns, title,setLoading }) {
     setLoading(true)
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/user/${id}/deleteInfor`,
+        `${process.env.REACT_APP_SERVER_URL}/user/${id}/deleteInfor`,
         {
           headers: {
             "access-token":

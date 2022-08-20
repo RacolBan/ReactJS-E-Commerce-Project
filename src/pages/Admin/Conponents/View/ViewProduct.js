@@ -21,7 +21,7 @@ function ViewProduct({ title, isFile,setLoading }) {
     const getData = async () => {
       try {
         const {data} =  await axios.get(
-          `http://localhost:8000/product/${param.id}`,
+          `${process.env.REACT_APP_SERVER_URL}/product/${param.id}`,
           {
             headers: {
               "access-token":
@@ -59,7 +59,7 @@ function ViewProduct({ title, isFile,setLoading }) {
     e.preventDefault();
     try {
       const { data } = await axios.put(
-        `http://localhost:8000/product/${param.id}`,
+        `${process.env.REACT_APP_SERVER_URL}/product/${param.id}`,
         productUpdate,
         {
           headers: {
@@ -92,7 +92,7 @@ function ViewProduct({ title, isFile,setLoading }) {
               <img
                 src={
                   file
-                    ? `http://localhost:8000/${file}`
+                    ? `${process.env.REACT_APP_SERVER_URL}/${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 alt="image"

@@ -112,6 +112,7 @@ input[type="username"]:focus {
   display: table;
   position: static;
   clear: both;
+  cursor: pointer;
 }
 
 .forgot-password {
@@ -126,4 +127,42 @@ input[type="username"]:focus {
 #login .inputs #submit:hover {
   background-color: #98a5c2;
   opacity: 1;
+}
+
+.button{
+  width: 100%;
+  padding: 15px 1px;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.loginButton-google{
+background-color: rgb(191 2 2);
+padding: 3px 3px 0px 3px;
+width: 50%;
+}
+
+.loginButton-facebook{
+padding: 3px 3px 0px 3px;
+background-color: rgb(43 89 215);
+width: 50%;
+
+}
+.text{
+position: relative;
+display: inline-block;
+top: -10px;
+left: 5px;
+}
+.text1{
+  position: relative;
+  display: inline-block;
+  top: -10px;
+  left: 0px;
+  font-size: 14px;
 }

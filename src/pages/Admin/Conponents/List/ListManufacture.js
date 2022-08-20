@@ -14,7 +14,7 @@ function ListManufacture({ columns, title,setLoading }) {
   const getManufacture = async () => {
     if (login) {
       try {
-        const { data } = await axios.get("http://localhost:8000/manufacture", {
+        const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/manufacture`, {
           headers: { "access-token": "Bearer " + login.accesstoken },
         });
         setManufactureAll(data);
@@ -59,7 +59,7 @@ function ListManufacture({ columns, title,setLoading }) {
     setLoading(true)
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/manufacture/${id}`,
+        `${process.env.REACT_APP_SERVER_URL}/manufacture/${id}`,
         {
           headers: {
             "access-token":

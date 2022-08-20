@@ -7,7 +7,7 @@ function ProductsApple() {
   const getProducts = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/product/category/2"
+        `${process.env.REACT_APP_SERVER_URL}/product/category/2`
       );
       setProductsApple(res.data);
     } catch (error) {

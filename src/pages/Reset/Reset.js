@@ -35,7 +35,7 @@ function Reset({setLoading}) {
 
     try {
       const { data } = await axios.put(
-        `http://localhost:8000/account/reset_password/${tokenAccount.accountId}`,
+        `${process.env.REACT_APP_SERVER_URL}/account/reset_password/${tokenAccount.accountId}`,
         {
           ...newPwd,
         }

@@ -7,7 +7,7 @@ function ProductsLaptop() {
   const getProducts = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/product/category/1"
+        `${process.env.REACT_APP_SERVER_URL}/product/category/1`
       );
       setProductsLaptop(res.data);
     } catch (error) {

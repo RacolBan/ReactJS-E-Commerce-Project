@@ -29,7 +29,7 @@ function Category({ handleAddProducts }) {
     const getProducts = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/product/pagination/category/${params.id}?manufacture=${manufacture}&limit=${limit}&page=${page}&sort=${sort}`
+          `${process.env.REACT_APP_SERVER_URL}/product/pagination/category/${params.id}?manufacture=${manufacture}&limit=${limit}&page=${page}&sort=${sort}`
         );
         const total = Math.ceil(data.count / limit);
         setToTalPages(total);
@@ -68,22 +68,25 @@ function Category({ handleAddProducts }) {
                   className={style["item-image"]}
                 >
                   <img
-                    src={`http://localhost:8000/${product.image}`}
+                    src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`}
                     alt="Apple"
                   />
                 </Link>
                 <span className={style["item-manufactory"]}>
-                  {product.manufactureId === 2 && (
+                  {product["manufacture.name"] === "Asus" && (
                     <img src="../../../images/Manufactory/asus.PNG" alt="" />
                   )}
-                  {product.manufactureId === 1 && (
+                  {product["manufacture.name"] === "Dell" && (
                     <img src="../../../images/Manufactory/dell.PNG" alt="" />
                   )}
-                  {product.manufactureId === 3 && (
+                  {product["manufacture.name"] === "Macbook" && (
                     <img src="../../../images/Manufactory/apple.PNG" alt="" />
                   )}
                 </span>
                 <h4 className={style["item-name"]}>{product.name}</h4>
+                <span className={style["item-description"]}>
+                  {product.description}
+                </span>
                 <span className={style["item-price"]}>${product.price}</span>
                 <span
                   className={style["btn-addCart"]}

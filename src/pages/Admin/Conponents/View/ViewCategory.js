@@ -17,7 +17,7 @@ function ViewCategory({ title, isFile,setLoading }) {
     const getData = async () => {
       try {
         const {data} =  await axios.get(
-          `http://localhost:8000/category/${param.id}`,
+          `${process.env.REACT_APP_SERVER_URL}/category/${param.id}`,
           {
             headers: {
               "access-token":
@@ -48,7 +48,7 @@ function ViewCategory({ title, isFile,setLoading }) {
     e.preventDefault();
     try {
       const { data } = await axios.put(
-        `http://localhost:8000/category/${param.id}`,
+        `${process.env.REACT_APP_SERVER_URL}/category/${param.id}`,
         categoryUpdate,
         {
           headers: {
@@ -81,7 +81,7 @@ function ViewCategory({ title, isFile,setLoading }) {
               <img
                 src={
                   file
-                    ? `http://localhost:8000/${file}`
+                    ? `${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 alt="image"

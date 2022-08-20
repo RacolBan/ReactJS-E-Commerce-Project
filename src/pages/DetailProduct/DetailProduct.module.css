@@ -9,6 +9,7 @@
   background-color: #fff;
   max-width: 83.33333%;
   margin: auto;
+  justify-content: space-around;
 }
 .detail .content {
   padding: 20px;
@@ -17,7 +18,9 @@
   text-align: center;
 }
 .container-left img {
-  width: auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
   vertical-align: center;
 }
 .container-right {
@@ -122,11 +125,19 @@
 
 .item-name {
   margin: 10px 0;
+  overflow: hidden;
+  display: block;
+}
+
+.item-description {
+  margin: 10px 0;
   height: 55px;
   overflow: hidden;
+  display: block;
 }
 
 .item-price {
+  display: block;
   font-size: 20px;
   font-weight: 600;
   color: #c8191f;

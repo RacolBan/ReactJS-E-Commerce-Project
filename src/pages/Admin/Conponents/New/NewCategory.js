@@ -28,7 +28,7 @@ function NewCategory({ inputs, title, isFile,setLoading }) {
     };
     try {
       const { data } = await axios.post(
-        `http://localhost:8000/category`,
+        `${process.env.REACT_APP_SERVER_URL}/category`,
         newCategory,
         {
           headers: {

@@ -82,7 +82,12 @@
 
 .item-name {
   margin: 10px 0;
-  height: 55px;
+  overflow: hidden;
+}
+
+.item-description {
+  margin: 10px 0;
+  height: 60px;
   overflow: hidden;
 }
 

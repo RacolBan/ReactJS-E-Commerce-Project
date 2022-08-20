@@ -14,9 +14,8 @@ function ListProducts({ columns, title,setLoading }) {
     if (login) {
       try {
         const { data } = await axios.get(
-          "http://localhost:8000/product/getAll"
+          `${process.env.REACT_APP_SERVER_URL}/product/getAll`
         );
-        setProductsAll(data);
       } catch (error) {
         toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER,
@@ -59,7 +58,7 @@ function ListProducts({ columns, title,setLoading }) {
     setLoading(true)
     try {
       const { data } = await axios.delete(
-        `http://localhost:8000/product/${id}`,
+        `${process.env.REACT_APP_SERVER_URL}/product/${id}`,
         {
           headers: {
             "access-token":

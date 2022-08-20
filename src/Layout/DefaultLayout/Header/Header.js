@@ -7,6 +7,7 @@ import style from "./Header.module.css";
 function Header() {
   const state = useContext(GlobalState);
   const [isLogged, setIsLogged] = state.UserAPI.isLogged;
+  
   const nav = useNavigate();
   const searchRef = useRef(0);
   const handleSearch = () => {
@@ -16,7 +17,7 @@ function Header() {
   };
   const user = state.UserAPI.user[0];
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("login");
     setIsLogged(false);
     toast.success("Logout successfully", {
       position: toast.POSITION.TOP_CENTER,
@@ -60,7 +61,7 @@ function Header() {
                   src={
                     user.avatar === null
                       ? "../../../../images/Avatar/avatar.jpg"
-                      : `http://localhost:8000/${user.avatar}`
+                      : `${process.env.REACT_APP_SERVER_URL}/${user.avatar}`
                   }
                   alt="avatar"
                 />

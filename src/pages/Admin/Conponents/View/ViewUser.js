@@ -22,7 +22,7 @@ function ViewUser({ title, isFile,setLoading }) {
     const getData = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/user/${param.id}/getInfor/admin`,
+          `${process.env.REACT_APP_SERVER_URL}/user/${param.id}/getInfor/admin`,
           {
             headers: {
               "access-token":
@@ -60,7 +60,7 @@ function ViewUser({ title, isFile,setLoading }) {
     e.preventDefault();
     try {
       const { data } = await axios.put(
-        `http://localhost:8000/user/${param.id}/updateInfor/admin`,
+        `${process.env.REACT_APP_SERVER_URL}/user/${param.id}/updateInfor/admin`,
         userUpdate,
         {
           headers: {
@@ -93,7 +93,7 @@ function ViewUser({ title, isFile,setLoading }) {
               <img
                 src={
                   file
-                    ? `http://localhost:8000/${file}`
+                    ? `${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 alt="image"

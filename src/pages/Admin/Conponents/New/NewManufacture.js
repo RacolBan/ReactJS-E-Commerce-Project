@@ -30,7 +30,7 @@ function NewManufacture({ inputs, title, isFile,setLoading }) {
     }
     try {
       const {data} = await axios.post(
-        `http://localhost:8000/manufacture`,
+        `${process.env.REACT_APP_SERVER_URL}/manufacture`,
         newManufacture,
         {
           headers: {

@@ -9,7 +9,7 @@ import { GlobalState } from '../../../GlobalState'
 function Apple({handleAddProducts}) {
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -22,7 +22,7 @@ function Apple({handleAddProducts}) {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          infinite: true,
+          infinite: false,
           dots: false
         }
       },
@@ -55,10 +55,10 @@ function Apple({handleAddProducts}) {
         </Link>
       </div>
       <Slider {...settings}>
-        {productsApple.map((product, index) => (
+        {productsApple?.map((product, index) => (
           <div className={style.item} key={index}>
             <Link to={`/detail/${product.id}`} className={style["item-image"]}>
-              <img src={`http://localhost:8000/${product.image}`} alt="Apple" />
+              <img src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`} alt="Apple" />
             </Link>
             <span className={style["item-manufactory"]}>
               <img src='./images/Manufactory/apple.png' alt="" />

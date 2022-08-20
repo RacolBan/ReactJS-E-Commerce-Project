@@ -15,7 +15,7 @@ function DetailProduct({ products, handleAddProducts }) {
       const getOneProduct = async () => {
         try {
           const { data } = await axios.get(
-            `http://localhost:8000/product/${params.id}`
+            `${process.env.REACT_APP_SERVER_URL}/product/${params.id}`
           );
           setProductDetail(data.product);
         } catch (error) {
@@ -30,7 +30,7 @@ function DetailProduct({ products, handleAddProducts }) {
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -42,8 +42,8 @@ function DetailProduct({ products, handleAddProducts }) {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
+          slidesToScroll: 1,
+          infinite: false,
           dots: false,
         },
       },
@@ -51,8 +51,7 @@ function DetailProduct({ products, handleAddProducts }) {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
+          slidesToScroll: 1,
         },
       },
       {
@@ -71,7 +70,7 @@ function DetailProduct({ products, handleAddProducts }) {
           <div className={`${style["container-left"]} col l-6 m-6 c-12`}>
             {productDetail.image && (
               <img
-                src={`http://localhost:8000/${productDetail.image}`}
+                src={`${process.env.REACT_APP_SERVER_URL}/${productDetail.image}`}
                 alt="image"
               />
             )}
@@ -104,38 +103,39 @@ function DetailProduct({ products, handleAddProducts }) {
         <div className={style["listItem"]}>
           <Slider {...settings}>
             {products?.map((product, index) =>
-              product.manufactureId === productDetail.manufactureId ? (
+              product.nameManufacture === productDetail.nameManufacture ? (
                 <div className={style.item} key={index}>
                   <Link
                     to={`/detail/${product.id}`}
                     className={style["item-image"]}
                   >
                     <img
-                      src={`http://localhost:8000/${product.image}`}
+                      src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`}
                       alt="image"
                     />
                   </Link>
                   <span className={style["item-manufactory"]}>
-                    {productDetail.manufactureId === 2 && (
+                    {productDetail.nameManufacture === "Asus" && (
                       <img
                         src="../../../../images/Manufactory/asus.PNG"
                         alt=""
                       />
                     )}
-                    {productDetail.manufactureId === 1 && (
+                    {productDetail.nameManufacture === "Dell" && (
                       <img
                         src="../../../../images/Manufactory/dell.PNG"
                         alt=""
                       />
                     )}
-                    {productDetail.manufactureId === 3 && (
+                    {productDetail.nameManufacture === "Macbook" && (
                       <img
-                        src="../../../../images/Manufactory/apple.PNG"
+                        src="../../../../images/Manufactory/apple.png"
                         alt=""
                       />
                     )}
                   </span>
                   <h4 className={style["item-name"]}>{product.name}</h4>
+                  <span className={style["item-description"]}>{product.description}</span>
                   <span className={style["item-price"]}>${product.price}</span>
                   <span
                     className={style["btn-addCart"]}

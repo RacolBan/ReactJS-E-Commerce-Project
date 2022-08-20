@@ -3,23 +3,24 @@ import { DataGrid } from "@mui/x-data-grid";
 import style from "./List.module.css";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Popup from "reactjs-popup";
+import OrderDetail from "./OrderDetail";
 
-function ListOrders({ columns, title,setLoading }) {
-  
+function ListOrders({ columns, title }) {
   const [orders, setOrders] = useState([]);
   const login = JSON.parse(localStorage.getItem("login")) || null;
 
-  const getManufacture = async () => {
+  const getOrder = async () => {
     if (login) {
-      setLoading(true)
       try {
-        const { data } = await axios.get("http://localhost:8000/order", {
-          headers: { "access-token": "Bearer " + login.accesstoken },
-        });
-        setLoading(false)
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/order`,
+          {
+            headers: { "access-token": "Bearer " + login.accesstoken },
+          }
+        );
         setOrders(data);
       } catch (error) {
-        setLoading(false)
         toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -28,10 +29,28 @@ function ListOrders({ columns, title,setLoading }) {
   };
 
   useEffect(() => {
-    getManufacture();
+    getOrder();
   }, []);
-  
-  
+  const actionColumn = [
+    {
+      field: "detail",
+      headerName: "Detail",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <div className={style.cellAction}>
+            <Popup
+              modal
+              trigger={<div className={style.viewButton}>Detail</div>}
+            >
+              {(close) => <OrderDetail close={close} id={params.row.id} />}
+            </Popup>
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <div className={style["list"]}>
       <div className={style["list-head"]}>
@@ -40,7 +59,7 @@ function ListOrders({ columns, title,setLoading }) {
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={orders}
-          columns={columns}
+          columns={columns.concat(actionColumn)}
           pageSize={5}
           rowsPerPageOptions={[5]}
           checkboxSelection

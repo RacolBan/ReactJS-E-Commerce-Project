@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
 import style from "./DefaultLayout.module.css";
 import { Link } from "react-router-dom";
 
-export default function defaultLayout({ children, cartItems }) {
+export default function DefaultLayout({ children, cartItems }) {
+  const [quantity,setQuantity] = useState(0)
+  useEffect(() => {
+    const getTotal = () => {
+      const tt = cartItems?.reduce((prev, item) => {
+        return prev + item.quantityProduct;
+      }, 0);
+      setQuantity(tt);
+    };
+    getTotal();
+  }, [cartItems]);
   return (
     <div>
       <Header />
@@ -14,11 +24,15 @@ export default function defaultLayout({ children, cartItems }) {
           <div className={style["cart-fixed"]}>
             <Link to="/cart">
               <i className="fa-solid fa-cart-shopping"></i>
-              <b>{cartItems?.length}</b>
+              <b>{quantity}</b>
             </Link>
           </div>
         )}
-        
+        <div className={style["message-fixed"]}>
+          <a href="https://www.messenger.com/t/100791439412241" target="_blank" >
+            <i className="fa-solid fa-comment"></i>
+          </a>
+        </div>
       </div>
       <Footer />
     </div>

@@ -180,18 +180,36 @@
 .cart .select-payment {
 }
 
-.cart .select-payment h3 {
+.cart .select-payment > h3 {
   font-size: 20px;
   margin: 10px 0;
   font-weight: 600;
 }
 
-.cart .select-payment form {
+.cart .select-payment > form {
   margin-bottom: 10px;
 }
 
-.cart .select-payment form label {
+.cart .select-payment > form > label {
   margin: 0 10px;
+}
+
+.cart .info-payment > h2 {
+  margin: 5px 0 20px;
+  font-size: 18px;
+}
+
+.cart .info-payment > form > input {
+  display: block;
+  padding: 9px 0;
+  height: 40px;
+  border: 1px solid #d9d9d9;
+  outline: none;
+  color: rgba(85, 85, 85);
+  border-radius: 4px;
+  margin: 0 0 20px;
+  text-indent: 10px;
+  width: 100%;
 }
 
 @media (max-width: 960px) {

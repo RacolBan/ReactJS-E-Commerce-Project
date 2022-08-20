@@ -67,7 +67,7 @@ function NewUser({ inputs, title, isFile,setLoading }) {
     try {
       const { data } = await axios({
         method: "post",
-        url: "http://localhost:8000/user/accounts/createProfile/admin",
+        url: `${process.env.REACT_APP_SERVER_URL}/user/accounts/createProfile/admin`,
         data: newUser,
         headers: {
           "Content-Type": "multipart/form-data",

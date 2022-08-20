@@ -39,7 +39,7 @@ function Profile({setLoading}) {
 
     try {
       await axios.put(
-        `http://localhost:8000/user/${user.accountId}/updateInfor/`,
+        `${process.env.REACT_APP_SERVER_URL}/user/${user.accountId}/updateInfor/`,
         newUser,
         { headers: { "access-token": "Bearer " + user.accesstoken } }
       );
@@ -72,7 +72,7 @@ function Profile({setLoading}) {
         newAvatar.append("file", file);
         try {
           const { data } = await axios.put(
-            `http://localhost:8000/user/upload/${user.userId}/users`,
+            `${process.env.REACT_APP_SERVER_URL}/user/upload/${user.userId}/users`,
             newAvatar,
             {
               headers: {
@@ -81,11 +81,12 @@ function Profile({setLoading}) {
               },
             }
           );
-          setUser({ ...user, avatar: data.filename });
+          setUser({ ...user, avatar: data.avatar });
           toast.success("Update successfully", {
             position: toast.POSITION.TOP_CENTER,
           });
         } catch (error) {
+          console.log(error);
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -104,7 +105,7 @@ function Profile({setLoading}) {
                 src={
                   user.avatar === null
                     ? "../../../../images/Avatar/avatar.jpg"
-                    : `http://localhost:8000/${user.avatar}`
+                    : `${process.env.REACT_APP_SERVER_URL}/${user.avatar}`
                 }
                 alt="avatar"
               />
@@ -223,7 +224,7 @@ function Profile({setLoading}) {
                   src={
                     user.avatar === null
                       ? "../../../../images/Avatar/avatar.jpg"
-                      : `http://localhost:8000/${user.avatar}`
+                      : `${process.env.REACT_APP_SERVER_URL}/${user.avatar}`
                   }
                   alt="avatar"
                 />

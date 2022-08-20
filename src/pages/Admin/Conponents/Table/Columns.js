@@ -35,7 +35,7 @@ export const columnsUsers = [
             src={
               params.row.avatar === null
                 ? "../../../../images/Avatar/avatar.jpg"
-                : `http://localhost:8000/${params.row.avatar}`
+                : `${process.env.REACT_APP_SERVER_URL}/${params.row.avatar}`
             }
             alt="avatar"
           />
@@ -71,7 +71,7 @@ export const columnsProducts = [
             src={
               params.row.image === null
                 ? "../../../../images/Avatar/avatar.jpg"
-                : `http://localhost:8000/${params.row.image}`
+                : `${process.env.REACT_APP_SERVER_URL}/${params.row.image}`
             }
             alt="image"
           />
@@ -103,7 +103,10 @@ export const columnsManufacture = [
 ];
 export const columnsOrder = [
   { field: "id", headerName: "ID", width: 100 },
-  { field: "userId", headerName: "UserID", width: 150 },
-  { field: "createdAt", headerName: "CreatedAt", width: 200 },
-  { field: "updatedAt", headerName: "UpdatedAt", width: 200 }
+  { field: "firstName", headerName: "First Name", width: 150 },
+  { field: "lastName", headerName: "Last Name", width: 150 },
+  { field: "phone", headerName: "Phone", width: 150 },
+  { field: "email", headerName: "Email", width: 250 },
+  { field: "createdAt", headerName: "CreatedAt", width: 180 },
+  { field: "updatedAt", headerName: "UpdatedAt", width: 180 },
 ];

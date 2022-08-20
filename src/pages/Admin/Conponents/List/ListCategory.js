@@ -13,7 +13,7 @@ function ListCategory({ columns, title,setLoading }) {
   const getCategory = async () => {
     if (login) {
       try {
-        const { data } = await axios.get("http://localhost:8000/category", {
+        const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/category`, {
           headers: { "access-token": "Bearer " + login.accesstoken },
         });
         setCategoryAll(data);
@@ -58,7 +58,7 @@ function ListCategory({ columns, title,setLoading }) {
     setLoading(true)
     try {
       const {data} = await axios.delete(
-        `http://localhost:8000/category/${id}`,
+        `${process.env.REACT_APP_SERVER_URL}/category/${id}`,
         {
           headers: {
             "access-token":

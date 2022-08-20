@@ -1,10 +1,9 @@
 import React from 'react'
-import './HeaderAdmin.scss'
-
+import style from './Header.module.css'
 function HeaderAdmin() {
   return (
-    <div className='header-admin'>
-        <div className='title'>
+    <div className={style["header-admin"]}>
+        <div className={style.title}>
             ADMIN 
         </div>
     </div>

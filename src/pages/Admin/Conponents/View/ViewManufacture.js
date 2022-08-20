@@ -17,7 +17,7 @@ function ViewManufacture({ title, isFile, setLoading }) {
       
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/manufacture/${param.id}`,
+          `${process.env.REACT_APP_SERVER_URL}/manufacture/${param.id}`,
           {
             headers: {
               "access-token":
@@ -45,7 +45,7 @@ function ViewManufacture({ title, isFile, setLoading }) {
     e.preventDefault();
     try {
       const { data } = await axios.put(
-        `http://localhost:8000/manufacture/${param.id}`,
+        `${process.env.REACT_APP_SERVER_URL}/manufacture/${param.id}`,
         manufactureUpdate,
         {
           headers: {
@@ -78,7 +78,7 @@ function ViewManufacture({ title, isFile, setLoading }) {
               <img
                 src={
                   file
-                    ? `http://localhost:8000/${file}`
+                    ? `${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 alt="image"
