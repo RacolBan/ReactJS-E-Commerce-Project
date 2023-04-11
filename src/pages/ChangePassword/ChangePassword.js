@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "API/api.config";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -25,8 +25,8 @@ function ChangePassword({setLoading}) {
       return;
     }
     try {
-      await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/account/change/${user.accountId}`,
+      await axiosClient.put(
+        `/account/change/${user.accountId}`,
         updatePassword,
         { headers: { "access-token": "Bearer " + user.accesstoken } }
       );

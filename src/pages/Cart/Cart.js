@@ -1,4 +1,5 @@
-import axios from "axios";
+/* eslint-disable react-hooks/exhaustive-deps */
+import axiosClient from "API/api.config";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -58,8 +59,8 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
       if (window.confirm("Do you want to delete this product?")) {
         setLoading(true);
         try {
-          const { data } = await axios.delete(
-            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}/product/${id}`
+          const { data } = await axiosClient.delete(
+            `/cart/user/${login.userId}/product/${id}`
           );
           cartItems.forEach((item, index) => {
             if (item.id === id) {
@@ -82,7 +83,7 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
     } else {
       if (window.confirm("Do you want to delete this product?")) {
         const newCartItems = cartItems.filter((item) => {
-          return item.id != id;
+          return item.id !== id;
         });
         setCartItems(newCartItems);
         localStorage.setItem("cartItems", JSON.stringify(newCartItems));
@@ -119,8 +120,8 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
     };
     try {
       if (method === "Ship Cod") {
-        const { data } = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/payment`,
+        const { data } = await axiosClient.post(
+          `/payment`,
           newPayment
         );
         setLoading(false);
@@ -129,8 +130,8 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
           position: toast.POSITION.TOP_CENTER,
         });
       } else {
-        const { data } = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/api/stripe/create-checkout-seasion`,
+        const { data } = await axiosClient.post(
+          `/api/stripe/create-checkout-seasion`,
           newPayment
         );
         setIsPm(!isPm);
@@ -154,8 +155,8 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
               <div className={`${style["list-orders-item"]} `} key={cart.id}>
                 <div className={`${style["list-orders-item-img"]} `}>
                   <img
-                    src={`${process.env.REACT_APP_SERVER_URL}/${cart.image}`}
-                    alt="image"
+                    src={`/${cart.image}`}
+                    alt="images"
                   />
                 </div>
                 <div className={`${style["list-orders-item-content"]}  `}>
@@ -269,7 +270,7 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
       ) : (
         <div className={style["no-cart"]}>
           <div className={style["no-cart-img"]}>
-            <img src="../images/no-cart/null-gio-hang.png" />
+            <img src="../images/no-cart/null-gio-hang.png" alt=''/>
           </div>
           <div className={style["no-cart-title"]}>
             <p>There are no products in your cart</p>

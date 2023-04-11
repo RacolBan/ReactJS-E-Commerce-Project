@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import style from "./ForgotPassword.module.css";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axiosClient from "API/api.config";
 
 function ForgotPassword({ isTempToken,setLoading }) {
   const [email, setEmail] = useState("");
@@ -13,8 +13,8 @@ function ForgotPassword({ isTempToken,setLoading }) {
       email: email,
     };
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/account/forgot_password`,
+      const { data } = await axiosClient.post(
+        `/account/forgot_password`,
         dataSend
       );
       const tempToken = {

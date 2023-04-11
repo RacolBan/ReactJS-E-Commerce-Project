@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "API/api.config";
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -16,8 +16,8 @@ function Search({ handleAddProducts }) {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/product/search?query=${query}`
+        const { data } = await axiosClient.get(
+          `/product/search?query=${query}`
         );
         setShowResult(data.foundProducts);
       } catch (error) {

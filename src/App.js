@@ -26,7 +26,7 @@ import {
   columnsOrder,
 } from "./pages/Admin/Conponents/Table/Columns";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosClient from 'API/api.config';
 import NewCategory from "./pages/Admin/Conponents/New/NewCategory";
 import Category from "./pages/Category/Category";
 import NewManufacture from "./pages/Admin/Conponents/New/NewManufacture";
@@ -44,7 +44,7 @@ import ViewManufacture from "./pages/Admin/Conponents/View/ViewManufacture";
 import ProductsAll from "./API/ProductsAll";
 import Search from "./pages/Search/Search";
 import ListOrders from "./pages/Admin/Conponents/List/ListOrders";
-import FadeLoader from "react-spinners/FadeLoader";
+// import FadeLoader from "react-spinners/FadeLoader";
 import Checkout from "./components/Checkout/Checkout";
 
 function App() {
@@ -54,40 +54,18 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [isPm, setIsPm] = useState(false);
   const login = JSON.parse(localStorage.getItem("login")) || null;
-  const [user, setUser] = useState(null)
-  const override = {
-    display: "block",
-    margin: "0 auto",
-  };
-  useEffect(() => { }, [loading]);
-
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     try {
-  //       const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/auth/login/success`, {
-  //         credentials: "include",
-  //         headers: {
-  //           Accept: "application/json",
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Credentials": true,
-  //         },
-  //       })
-  //       console.log(data)
-  //       setUser(data.user)
-  //     } catch (error) {
-  //       toast.error(error.response.data.message, {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //     }
-  //     getUser();
-  //   }
-  // }, []);
+  console.log(login)
+  // const override = {
+  //   display: "block",
+  //   margin: "0 auto",
+  // };
+ 
   useEffect(() => {
     if (login) {
       const getCart = async () => {
         try {
-          const { data } = await axios.get(
-            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}`
+          const { data } = await axiosClient.get(
+            `/cart/user/${login.userId}`
           );
           setCartItems(data.newCarts);
           localStorage.setItem("cartItems", JSON.stringify(data.newCarts));
@@ -104,7 +82,8 @@ function App() {
       }
       setCartItems(JSON.parse(localStorage.getItem("cartItems")));
     }
-  }, [isPm]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const handleAddProducts = async (product) => {
     if (login) {
       const findExxist = cartItems.findIndex((item) => {
@@ -112,8 +91,8 @@ function App() {
       });
       if (findExxist >= 0) {
         try {
-          const { data } = await axios.put(
-            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}/product/${product.id}`
+          const { data } = await axiosClient.put(
+            `/cart/user/${login.userId}/product/${product.id}`
           );
 
           cartItems[findExxist] = {
@@ -135,8 +114,8 @@ function App() {
           quantityProduct: 1,
         };
         try {
-          await axios.post(
-            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}/product/${product.id}`,
+          await axiosClient.post(
+            `/cart/user/${login.userId}/product/${product.id}`,
             quantity
           );
           setCartItems([...cartItems, { ...product, quantityProduct: 1 }]);
@@ -183,8 +162,8 @@ function App() {
 
   useEffect(() => {
     const getCategory = async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/category`
+      const { data } = await axiosClient.get(
+        '/category'
       );
       setCategoryAll(data);
     };
@@ -195,14 +174,14 @@ function App() {
   const LayoutAdmin = AdminLayout;
   return (
     <DataProvider>
-      {loading ? (
+      {/* {loading ? (
         <FadeLoader
           color="red"
           loading={loading}
           cssOverride={override}
           size={150}
         />
-      ) : (
+      ) : ( */}
         <Router>
           <Routes>
             <Route
@@ -490,8 +469,7 @@ function App() {
             </Route>
           </Routes>
         </Router>
-      )}
-
+      {/* )} */}
       <ToastContainer position="top-center" newestOnTop />
     </DataProvider>
   );

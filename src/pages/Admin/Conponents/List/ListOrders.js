@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import style from "./List.module.css";
 import { toast } from "react-toastify";
-import axios from "axios";
 import Popup from "reactjs-popup";
 import OrderDetail from "./OrderDetail";
+import axiosClient from "API/api.config";
 
 function ListOrders({ columns, title }) {
   const [orders, setOrders] = useState([]);
@@ -13,12 +14,7 @@ function ListOrders({ columns, title }) {
   const getOrder = async () => {
     if (login) {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/order`,
-          {
-            headers: { "access-token": "Bearer " + login.accesstoken },
-          }
-        );
+        const { data } = await axiosClient.get(`/order`);
         setOrders(data);
       } catch (error) {
         toast.error(error.response.data.message, {

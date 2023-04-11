@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import style from "./New.module.css";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import axiosClient from "API/api.config";
 
 function ViewManufacture({ title, isFile, setLoading }) {
   const param = useParams();
@@ -16,20 +16,9 @@ function ViewManufacture({ title, isFile, setLoading }) {
     const getData = async () => {
       
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/manufacture/${param.id}`,
-          {
-            headers: {
-              "access-token":
-                "Bearer " +
-                JSON.parse(localStorage.getItem("login")).accesstoken,
-            },
-          }
-        );
-        
+        const { data } = await axiosClient.get(`/manufacture/${param.id}`);
         setName(data.manufacturer.name);
       } catch (error) {
-        
         toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -44,16 +33,7 @@ function ViewManufacture({ title, isFile, setLoading }) {
     setLoading(true);
     e.preventDefault();
     try {
-      const { data } = await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/manufacture/${param.id}`,
-        manufactureUpdate,
-        {
-          headers: {
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const { data } = await axiosClient.put(`/manufacture/${param.id}`,manufactureUpdate);
       setLoading(false);
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -81,7 +61,7 @@ function ViewManufacture({ title, isFile, setLoading }) {
                     ? `${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-                alt="image"
+                alt="images"
               />
             </div>
           )}

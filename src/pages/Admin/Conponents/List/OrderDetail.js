@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "API/api.config";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import style from "./OrderDetail.module.css";
@@ -10,8 +10,8 @@ function OrderDetail({ close, id }) {
     if (login) {
       const getData = async () => {
         try {
-          const { data } = await axios.get(
-            `${process.env.REACT_APP_SERVER_URL}/orderDetail/order/${id}`,
+          const { data } = await axiosClient.get(
+            `/orderDetail/order/${id}`,
             {
               headers: {
                 "access-token":
@@ -32,9 +32,9 @@ function OrderDetail({ close, id }) {
   }, []);
   return (
     <div className={style.modal}>
-      <a className={style.close} onClick={close}>
+      <span className={style.close} onClick={close}>
         &times;
-      </a>
+      </span>
       <div className={style.header}> Order Detail </div>
       <div className={style.content}>
         <table>
@@ -67,7 +67,8 @@ function OrderDetail({ close, id }) {
                   </td>
                   <td className={`col l-1`}>
                     <img
-                      src={`${process.env.REACT_APP_SERVER_URL}/${product["product.image"]}`}
+                      src={`${process.env.REACT_APP_SERVER_URL}/assets/${product["product.image"]}`}
+                      alt='product'
                     />
                   </td>
                   <td className={`col l-1`}>

@@ -1,4 +1,5 @@
-import axios from "axios";
+/* eslint-disable react-hooks/exhaustive-deps */
+import axiosClient from "API/api.config";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -34,11 +35,8 @@ function Reset({setLoading}) {
     };
 
     try {
-      const { data } = await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/account/reset_password/${tokenAccount.accountId}`,
-        {
-          ...newPwd,
-        }
+      const { data } = await axiosClient.put(
+        `/account/reset_password/${tokenAccount.accountId}`, newPwd
       );
       setLoading(false)
       toast.success(data.message, {

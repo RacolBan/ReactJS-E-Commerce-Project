@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import style from "./New.module.css";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast} from "react-toastify";
+import axiosClient from "API/api.config";
 
 function ViewUser({ title, isFile,setLoading }) {
   const [file, setFile] = useState(null);
@@ -21,16 +21,7 @@ function ViewUser({ title, isFile,setLoading }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/user/${param.id}/getInfor/admin`,
-          {
-            headers: {
-              "access-token":
-                "Bearer " +
-                JSON.parse(localStorage.getItem("login")).accesstoken,
-            },
-          }
-        );
+        const { data } = await axiosClient.get(`/user/${param.id}/getInfor/admin`);
         if (data.User) {
           setUsername(data.User.username);
           setFirstName(data.User.firstName);
@@ -59,16 +50,7 @@ function ViewUser({ title, isFile,setLoading }) {
     setLoading(true)
     e.preventDefault();
     try {
-      const { data } = await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/user/${param.id}/updateInfor/admin`,
-        userUpdate,
-        {
-          headers: {
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const { data } = await axiosClient.put(`/user/${param.id}/updateInfor/admin`,userUpdate);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER
@@ -96,7 +78,7 @@ function ViewUser({ title, isFile,setLoading }) {
                     ? `${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-                alt="image"
+                alt="images"
               />
             </div>
           )}

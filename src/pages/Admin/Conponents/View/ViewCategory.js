@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import style from "./New.module.css";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast} from "react-toastify";
+import axiosClient from "API/api.config";
 
 
 function ViewCategory({ title, isFile,setLoading }) {
@@ -16,16 +16,8 @@ function ViewCategory({ title, isFile,setLoading }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const {data} =  await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/category/${param.id}`,
-          {
-            headers: {
-              "access-token":
-                "Bearer " +
-                JSON.parse(localStorage.getItem("login")).accesstoken,
-            },
-          }
-        );
+        const {data} =  await axiosClient.get(
+          `/category/${param.id}`);
 
         if(data) {
           setName(data.category.name)
@@ -47,8 +39,8 @@ function ViewCategory({ title, isFile,setLoading }) {
     setLoading(true)
     e.preventDefault();
     try {
-      const { data } = await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/category/${param.id}`,
+      const { data } = await axiosClient.put(
+        `/category/${param.id}`,
         categoryUpdate,
         {
           headers: {
@@ -84,7 +76,7 @@ function ViewCategory({ title, isFile,setLoading }) {
                     ? `${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-                alt="image"
+                alt="images"
               />
             </div>
           )}

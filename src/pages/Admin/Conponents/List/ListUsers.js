@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useNavigate } from "react-router-dom";
 import style from "./List.module.css";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axiosClient from "API/api.config";
 
 function ListUsers({ columns, title,setLoading }) {
   const login = JSON.parse(localStorage.getItem("login")) || null;
@@ -12,9 +13,7 @@ function ListUsers({ columns, title,setLoading }) {
   const getUsers = async () => {
     try {
       if (login) {
-        const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/getAll`, {
-          headers: { "access-token": "Bearer " + login.accesstoken },
-        });
+        const { data } = await axiosClient.get(`/user/getAll`);
         setUsersAll(data);
       }
     } catch (error) {
@@ -57,15 +56,8 @@ function ListUsers({ columns, title,setLoading }) {
   const handleDelete = async (id) => {
     setLoading(true)
     try {
-      const { data } = await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/user/${id}/deleteInfor`,
-        {
-          headers: {
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const { data } = await axiosClient.delete(
+        `/user/${id}/deleteInfor`);
       setLoading(false)
       setIsDlt(!isDlt)
       toast.success(data.message, {

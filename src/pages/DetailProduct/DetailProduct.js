@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import style from "./DetailProduct.module.css";
@@ -6,6 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { toast } from "react-toastify";
+import axiosClient from "API/api.config";
 
 function DetailProduct({ products, handleAddProducts }) {
   const params = useParams();
@@ -14,9 +14,10 @@ function DetailProduct({ products, handleAddProducts }) {
     if (params.id) {
       const getOneProduct = async () => {
         try {
-          const { data } = await axios.get(
-            `${process.env.REACT_APP_SERVER_URL}/product/${params.id}`
+          const { data } = await axiosClient.get(
+            `/product/${params.id}`
           );
+          console.log(data)
           setProductDetail(data.product);
         } catch (error) {
           toast.error(error.response.data.message, {
@@ -70,8 +71,8 @@ function DetailProduct({ products, handleAddProducts }) {
           <div className={`${style["container-left"]} col l-6 m-6 c-12`}>
             {productDetail.image && (
               <img
-                src={`${process.env.REACT_APP_SERVER_URL}/${productDetail.image}`}
-                alt="image"
+                src={`${process.env.REACT_APP_SERVER_URL}/assets/${productDetail.image}`}
+                alt="images"
               />
             )}
           </div>
@@ -110,18 +111,18 @@ function DetailProduct({ products, handleAddProducts }) {
                     className={style["item-image"]}
                   >
                     <img
-                      src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`}
-                      alt="image"
+                      src={`${process.env.REACT_APP_SERVER_URL}/assets/${product.image}`}
+                      alt="images"
                     />
                   </Link>
                   <span className={style["item-manufactory"]}>
-                    {productDetail.nameManufacture === "Asus" && (
+                    {productDetail.nameManufacture === "asus" && (
                       <img
                         src="../../../../images/Manufactory/asus.PNG"
                         alt=""
                       />
                     )}
-                    {productDetail.nameManufacture === "Dell" && (
+                    {productDetail.nameManufacture === "dell" && (
                       <img
                         src="../../../../images/Manufactory/dell.PNG"
                         alt=""

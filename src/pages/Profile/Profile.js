@@ -1,4 +1,4 @@
-import axios from "axios";
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { GlobalState } from "../../GlobalState";
 import style from "./Profile.module.css";
 import FormData from "form-data";
 import { toast } from "react-toastify";
+import axiosClient from "API/api.config";
 
 function Profile({setLoading}) {
   const state = useContext(GlobalState);
@@ -38,11 +39,7 @@ function Profile({setLoading}) {
     e.preventDefault();
 
     try {
-      await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/user/${user.accountId}/updateInfor/`,
-        newUser,
-        { headers: { "access-token": "Bearer " + user.accesstoken } }
-      );
+      await axiosClient.put(`/user/${user.accountId}/updateInfor/`, newUser);
       setLoading(false)
       setUser({...user,firstname,lastname,address})
       toast.success("Update successfully", {
@@ -71,22 +68,12 @@ function Profile({setLoading}) {
 
         newAvatar.append("file", file);
         try {
-          const { data } = await axios.put(
-            `${process.env.REACT_APP_SERVER_URL}/user/upload/${user.userId}/users`,
-            newAvatar,
-            {
-              headers: {
-                "Content-Type": `multipart/form-data; boundary=${newAvatar._boundary}`,
-                accept: "application/json",
-              },
-            }
-          );
+          const { data } = await axiosClient.put(`/user/upload/${user.userId}/users`,newAvatar);
           setUser({ ...user, avatar: data.avatar });
           toast.success("Update successfully", {
             position: toast.POSITION.TOP_CENTER,
           });
         } catch (error) {
-          console.log(error);
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });

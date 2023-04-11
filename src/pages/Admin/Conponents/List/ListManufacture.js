@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import style from "./List.module.css";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axiosClient from "API/api.config";
 
 function ListManufacture({ columns, title,setLoading }) {
   
@@ -14,9 +15,7 @@ function ListManufacture({ columns, title,setLoading }) {
   const getManufacture = async () => {
     if (login) {
       try {
-        const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/manufacture`, {
-          headers: { "access-token": "Bearer " + login.accesstoken },
-        });
+        const { data } = await axiosClient.get(`/manufacture`);
         setManufactureAll(data);
       } catch (error) {
         toast.error(error.response.data.message, {
@@ -58,21 +57,12 @@ function ListManufacture({ columns, title,setLoading }) {
   const handleDelete = async (id) => {
     setLoading(true)
     try {
-      const { data } = await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/manufacture/${id}`,
-        {
-          headers: {
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const { data } = await axiosClient.delete(`/manufacture/${id}`);
       setDlt(!isDlt)
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER,
       });
-
     } catch (error) {
       setLoading(false)
       toast.error(error.response.data.message, {

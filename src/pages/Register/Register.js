@@ -1,14 +1,11 @@
-import axios from "axios";
-import React, { useContext, useState } from "react";
+import axiosClient from "API/api.config";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { GlobalState } from "../../GlobalState";
 import style from "./Register.module.css";
 
-function Register({setLoading}) {
+function Register({ setLoading }) {
   const nav = useNavigate()
-  const state = useContext(GlobalState)
-  const [isLogged, setIsLogged] = state.UserAPI.isLogged;
   const [input, setInput] = useState({
     firstname: "",
     lastname: "",
@@ -18,6 +15,7 @@ function Register({setLoading}) {
     email: "",
     password: "",
     confirmPassword: "",
+    check: false
   });
   const [error, setError] = useState({
     firstname: "",
@@ -148,33 +146,19 @@ function Register({setLoading}) {
     lastName: input.lastname,
     address: input.address,
     phone: input.phone,
-    email: input.email,
+    email: input.email
   };
   const registerSubmit = async (e) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/user/accounts/creatProfile`,
-        {
-          ...user,
-        }
-      );
-      const login = {
-        accesstoken: data.accesstoken,
-        accountId: data.newAccount.id,
-        username: data.newAccount.username,
-        avatar: null,
-        userId:data.newInfor.id
-      };
-      localStorage.clear()
-      localStorage.setItem("login", JSON.stringify(login));
-      setIsLogged(true)
-      setLoading(false)
+    await axiosClient.post('/user/accounts/createProfile', user);
+      console.log('a');
       toast.success("Register successfully", {
         position: toast.POSITION.TOP_CENTER,
       });
-      return nav('/')
+      console.log('aaa')
+      return nav('/login');
     } catch (error) {
       setLoading(false)
       toast.error(error.response.data.message, {
@@ -234,6 +218,18 @@ function Register({setLoading}) {
           <div className={style["input-item"]}>
             <input
               type="text"
+              name="email"
+              placeholder="Enter Email"
+              value={input.email}
+              onChange={onInputChange}
+              onBlur={validateInput}
+              spellCheck="false"
+            ></input>
+            {error.email && <span className={style.error}>{error.email}</span>}
+          </div>
+          <div className={style["input-item"]}>
+            <input
+              type="text"
               name="address"
               placeholder="Enter Address"
               value={input.address}
@@ -254,25 +250,15 @@ function Register({setLoading}) {
               onChange={onInputChange}
               onBlur={validateInput}
               spellCheck="false"
-            ></input>
+            />
             {error.phone && <span className={style.error}>{error.phone}</span>}
           </div>
-          <div className={style["input-item"]}>
-            <input
-              type="text"
-              name="email"
-              placeholder="Enter Email"
-              value={input.email}
-              onChange={onInputChange}
-              onBlur={validateInput}
-              spellCheck="false"
-            ></input>
-            {error.email && <span className={style.error}>{error.email}</span>}
-          </div>
+
           <div className={style["input-item"]}>
             <input
               type="password"
               name="password"
+              autoComplete='true'
               placeholder="Enter Password"
               value={input.password}
               onChange={onInputChange}
@@ -286,6 +272,7 @@ function Register({setLoading}) {
 
           <div className={style["input-item"]}>
             <input
+            autoComplete="true"
               type="password"
               name="confirmPassword"
               placeholder="Enter Confirm Password"
@@ -300,13 +287,26 @@ function Register({setLoading}) {
           </div>
 
           <div className={style.checkboxy}>
-            <input name="check" id="checkbox" value="1" type="checkbox" />
+            <input
+              name="check" 
+              id="checkbox" 
+              onChange={(e) => setInput((prev) =>{
+                return {...prev, check: e.target.checked} 
+              })} 
+              value={input.check} 
+              checked={input.check} 
+              type="checkbox" />
             <label htmlFor="checkbox" className={style.terms}>
               I agree with the term of services
             </label>
           </div>
 
-          <button id={style.submit}>Register</button>
+          <button 
+            id={style.submit} 
+            disabled={input.check ? false : true}
+          >
+            Register
+          </button>
         </div>
       </form>
     </div>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "API/api.config";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GlobalState } from "../GlobalState";
@@ -6,14 +6,12 @@ import { GlobalState } from "../GlobalState";
 
 function UsersAll() {
   const state = useContext(GlobalState);
-  const [isAdmin, setIsAdmin] = state.UserAPI.isAdmin;
+  const isAdmin = state.UserAPI.isAdmin;
   const login = JSON.parse(localStorage.getItem("login")) || null;
   const [usersAll, setUsersAll] = useState([]);
   const getUsers = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/getAll`, {
-        headers: { "access-token": "Bearer " + login.accesstoken },
-      });
+      const { data } = await axiosClient.get(`/user/getAll`);
       setUsersAll(data);
     } catch (error) {
       toast.error(error.response.data.message, {
@@ -25,6 +23,7 @@ function UsersAll() {
     if (isAdmin) {
       getUsers();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
   return {
     usersAll: [usersAll, setUsersAll],

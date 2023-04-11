@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import style from "./New.module.css";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axiosClient from "API/api.config";
 
 function NewUser({ inputs, title, isFile,setLoading }) {
   const nav = useNavigate();
@@ -65,16 +65,7 @@ function NewUser({ inputs, title, isFile,setLoading }) {
     }
 
     try {
-      const { data } = await axios({
-        method: "post",
-        url: `${process.env.REACT_APP_SERVER_URL}/user/accounts/createProfile/admin`,
-        data: newUser,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "access-token":
-            "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-        },
-      });
+      const { data } = await axiosClient.post('/user/accounts/createProfile/admin', newUser)
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -102,7 +93,7 @@ function NewUser({ inputs, title, isFile,setLoading }) {
                     ? URL.createObjectURL(file)
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-                alt="image"
+                alt=""
               />
             </div>
           )}

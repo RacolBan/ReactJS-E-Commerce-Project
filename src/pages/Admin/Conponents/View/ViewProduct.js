@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import style from "./New.module.css";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast} from "react-toastify";
+import axiosClient from "API/api.config";
 
 
 function ViewProduct({ title, isFile,setLoading }) {
@@ -20,7 +19,7 @@ function ViewProduct({ title, isFile,setLoading }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const {data} =  await axios.get(
+        const {data} =  await axiosClient.get(
           `${process.env.REACT_APP_SERVER_URL}/product/${param.id}`,
           {
             headers: {
@@ -58,16 +57,7 @@ function ViewProduct({ title, isFile,setLoading }) {
     setLoading(true)
     e.preventDefault();
     try {
-      const { data } = await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/product/${param.id}`,
-        productUpdate,
-        {
-          headers: {
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const { data } = await axiosClient.put(`/product/${param.id}`,productUpdate);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER
@@ -95,7 +85,7 @@ function ViewProduct({ title, isFile,setLoading }) {
                     ? `${process.env.REACT_APP_SERVER_URL}/${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-                alt="image"
+                alt="images"
               />
             </div>
           )}

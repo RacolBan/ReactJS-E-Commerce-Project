@@ -1,14 +1,14 @@
-import axios from "axios";
+import axiosClient from "API/api.config";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 
 function ProductsAll() {
-  const login = JSON.parse(localStorage.getItem("login")) || null;
+  
   const [productsAll, setProductsAll] = useState([]);
   const getProducts = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/product/getAll`);
+      const { data } = await axiosClient.get('/product/getAll');
       setProductsAll(data);
     } catch (error) {
       toast.error(error.response.data.message, {

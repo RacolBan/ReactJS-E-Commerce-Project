@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useNavigate } from "react-router-dom";
 import style from "./List.module.css";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axiosClient from "API/api.config";
 
 function ListProducts({ columns, title,setLoading }) {
   const login = JSON.parse(localStorage.getItem("login")) || null;
@@ -13,9 +14,8 @@ function ListProducts({ columns, title,setLoading }) {
   const getProducts = async () => {
     if (login) {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/product/getAll`
-        );
+        const { data } = await axiosClient.get(`/product/getAll`);
+        setProductsAll(data)
       } catch (error) {
         toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER,
@@ -57,15 +57,7 @@ function ListProducts({ columns, title,setLoading }) {
   const handleDelete = async (id) => {
     setLoading(true)
     try {
-      const { data } = await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/product/${id}`,
-        {
-          headers: {
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const { data } = await axiosClient.delete(`/product/${id}`);
       setLoading(false)
       setIsDlt(!isDlt)
       toast.success(data.message, {

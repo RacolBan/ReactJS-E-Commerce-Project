@@ -33,7 +33,7 @@ function CategoryProduct({ categoryList }) {
               {categoryList?.map((item) => (
                 <li className={style["menu-item"]} key={item.id}>
                   <img src={`./images/Icon/${item.id}.png`} alt="icon" />
-                  <Link to={`/category/${item.id}`}>{item.name}</Link>
+                  <Link to={`/category/${item.id}`}>{item.name.toUpperCase()}</Link>
                 </li>
               ))}
             </ul>

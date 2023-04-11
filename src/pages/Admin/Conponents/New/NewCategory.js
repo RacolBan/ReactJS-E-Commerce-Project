@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import style from "./New.module.css";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axiosClient from "API/api.config";
 
 function NewCategory({ inputs, title, isFile,setLoading }) {
   const [info, setInfo] = useState({});
@@ -27,17 +27,7 @@ function NewCategory({ inputs, title, isFile,setLoading }) {
       name: info.name,
     };
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/category`,
-        newCategory,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const { data } = await axiosClient.post(`/category`,newCategory);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -65,7 +55,7 @@ function NewCategory({ inputs, title, isFile,setLoading }) {
                     ? URL.createObjectURL(file)
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-                alt="image"
+                alt='scenes'
               />
             </div>
           )}

@@ -29,7 +29,7 @@ export default function DefaultLayout({ children, cartItems }) {
           </div>
         )}
         <div className={style["message-fixed"]}>
-          <a href="https://www.messenger.com/t/100791439412241" target="_blank" >
+          <a href="https://www.messenger.com/t/100791439412241" target="_blank" rel="noreferrer" >
             <i className="fa-solid fa-comment"></i>
           </a>
         </div>

@@ -60,7 +60,7 @@ function Laptop({handleAddProducts}) {
           <div className={style.item} key={index}>
             <Link to={`/detail/${product.id}`} className={style["item-image"]}>
               <img
-                src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`}
+                src={`${process.env.REACT_APP_SERVER_URL}/assets/${product.image}`}
                 alt="Laptop"
               />
             </Link>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "API/api.config";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useCustomRouter from "../../Hooks/useCustomRouter";
@@ -11,8 +11,8 @@ const SelectManu = ({ page, categoryId,sort }) => {
   useEffect(() => {
     const getManufacture = async () => {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/manufacture/category/${categoryId}`
+        const { data } = await axiosClient.get(
+          `/manufacture/category/${categoryId}`
         );
         setManufacture(data);
       } catch (error) {

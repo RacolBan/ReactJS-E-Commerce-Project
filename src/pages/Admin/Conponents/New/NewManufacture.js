@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import style from "./New.module.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axiosClient from "API/api.config";
 
 function NewManufacture({ inputs, title, isFile,setLoading }) {
   const [info, setInfo] = useState({});
@@ -29,17 +29,7 @@ function NewManufacture({ inputs, title, isFile,setLoading }) {
       nameCategory:info.nameCategory
     }
     try {
-      const {data} = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/manufacture`,
-        newManufacture,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "access-token":
-              "Bearer " + JSON.parse(localStorage.getItem("login")).accesstoken,
-          },
-        }
-      );
+      const {data} = await axiosClient.post(`/manufacture`,newManufacture);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER
@@ -67,7 +57,7 @@ function NewManufacture({ inputs, title, isFile,setLoading }) {
                     ? URL.createObjectURL(file)
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-                alt="image"
+                alt="imasge"
               />
             </div>
           )}

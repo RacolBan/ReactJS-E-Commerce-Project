@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import axiosClient from "./api.config";
 
 function UserAPI() {
   const [isLogged, setIsLogged] = useState(false);
@@ -20,10 +20,7 @@ function UserAPI() {
     if (login) {
       const getUser = async () => {
         try {
-          const { data } = await axios.get(
-            `${process.env.REACT_APP_SERVER_URL}/user/${login.accountId}/getInfor`,
-            { headers: { "access-token": "Bearer " + login.accesstoken } }
-          );
+          const { data } = await axiosClient.get(`/user/${login.accountId}/getInfor`);
           if (data.inforUser.avatar === null) {
             setUser({
               address: data.inforUser.address,
@@ -53,23 +50,22 @@ function UserAPI() {
               role: login.role,
             });
           }
+          setIsLogged(true)
           if (login.role === 0) {
             setIsAdmin(true);
+            setIsLogged(true);
           }
-          setIsLogged(true);
         } catch (error) {
           localStorage.clear();
           toast.error("session out, please login again", {
             position: toast.POSITION.TOP_CENTER,
           });
-
         }
       };
-
       getUser();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
-
   return {
     isLogged: [isLogged, setIsLogged],
     user: [user, setUser],

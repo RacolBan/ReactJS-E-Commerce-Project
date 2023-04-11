@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 
 function Sidebar() {
   const state = useContext(GlobalState);
-  const [isLogged, setIsLogged] = state.UserAPI.isLogged;
+  const [,setIsLogged] = state.UserAPI.isLogged;
   const nav = useNavigate();
 
   const handleLogout = () => {

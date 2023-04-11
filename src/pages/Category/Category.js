@@ -1,4 +1,5 @@
-import axios from "axios";
+/* eslint-disable react-hooks/exhaustive-deps */
+import axiosClient from "API/api.config";
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -28,8 +29,8 @@ function Category({ handleAddProducts }) {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/product/pagination/category/${params.id}?manufacture=${manufacture}&limit=${limit}&page=${page}&sort=${sort}`
+        const { data } = await axiosClient.get(
+          `/product/pagination/category/${params.id}?manufacture=${manufacture}&limit=${limit}&page=${page}&sort=${sort}`
         );
         const total = Math.ceil(data.count / limit);
         setToTalPages(total);
@@ -68,18 +69,18 @@ function Category({ handleAddProducts }) {
                   className={style["item-image"]}
                 >
                   <img
-                    src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`}
+                    src={`${process.env.REACT_APP_SERVER_URL}/assets/${product.image}`}
                     alt="Apple"
                   />
                 </Link>
                 <span className={style["item-manufactory"]}>
-                  {product["manufacture.name"] === "Asus" && (
+                  {product["manufacture.name"] === "asus" && (
                     <img src="../../../images/Manufactory/asus.PNG" alt="" />
                   )}
-                  {product["manufacture.name"] === "Dell" && (
+                  {product["manufacture.name"] === "dell" && (
                     <img src="../../../images/Manufactory/dell.PNG" alt="" />
                   )}
-                  {product["manufacture.name"] === "Macbook" && (
+                  {product["manufacture.name"] === "macbook" && (
                     <img src="../../../images/Manufactory/apple.PNG" alt="" />
                   )}
                 </span>

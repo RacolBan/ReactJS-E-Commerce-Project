@@ -11,13 +11,14 @@ function Header() {
   const nav = useNavigate();
   const searchRef = useRef(0);
   const handleSearch = () => {
-    const value = searchRef.current.value;
+    const value = searchRef.current.valueOf;
     nav(value ? `/search/?query=${value}` : '/search');
-    searchRef.current.value = "";
+    searchRef.current.valueOf = "";
   };
   const user = state.UserAPI.user[0];
   const handleLogout = () => {
     localStorage.removeItem("login");
+    localStorage.removeItem("token");
     setIsLogged(false);
     toast.success("Logout successfully", {
       position: toast.POSITION.TOP_CENTER,

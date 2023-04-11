@@ -1,33 +1,27 @@
 import React, { useContext, useState } from "react";
 import style from "./Login.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosClient from 'API/api.config';
 import { GlobalState } from "../../GlobalState";
 import { toast } from "react-toastify";
 
 function Login({ setLoading }) {
   const state = useContext(GlobalState);
   const nav = useNavigate();
-  const [isLogged, setIsLogged] = state.UserAPI.isLogged;
-  const [isAdmin, setIsAdmin] = state.UserAPI.isAdmin;
+  const [,setIsLogged] = state.UserAPI.isLogged;
+  const [,setIsAdmin] = state.UserAPI.isAdmin;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const user = {
-    username: username,
-    password: password,
+    username,
+    password,
   };
 
   const loginSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/account/login`,
-        {
-          ...user,
-        }
-      );
+      const { data } = await axiosClient.post('/account/login', user);
       const login = {
         accesstoken: data.accesstoken,
         accountId: data.id,
@@ -36,22 +30,20 @@ function Login({ setLoading }) {
         role: data.role,
         userId: data.userId,
       };
+      localStorage.setItem("login", JSON.stringify(login));
+      localStorage.setItem("token", data.accesstoken);
       if (JSON.parse(localStorage.getItem("cartItems"))) {
         try {
           const products = {
             products: JSON.parse(localStorage.getItem("cartItems")),
           };
-          await axios.post(
-            `${process.env.REACT_APP_SERVER_URL}/cart/user/${login.userId}/products`, products
-          );
+          await axiosClient.post(`/cart/user/${login.userId}/products`, products);
         } catch (error) {
           toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_CENTER,
+            position: toast.POSITION.TOP_CENTER
           });
         }
-      }
-      localStorage.removeItem("login");
-      localStorage.setItem("login", JSON.stringify(login));
+      };
       if (data.role === 0) {
         setIsLogged(true);
         setIsAdmin(true);
@@ -74,13 +66,6 @@ function Login({ setLoading }) {
         position: toast.POSITION.TOP_CENTER,
       });
     }
-  };
-  const google = () => {
-    window.open(`${process.env.REACT_APP_SERVER_URL}/auth/google`, "_blank");
-  };
-
-  const facebook = () => {
-    window.open(`${process.env.REACT_APP_SERVER_URL}/auth/facebook`, "_self");
   };
   return (
     <div className={style.container}>
@@ -105,6 +90,7 @@ function Login({ setLoading }) {
           />
 
           <input
+          autoComplete='true'
             type="password"
             placeholder="Password"
             name="password"
@@ -128,17 +114,6 @@ function Login({ setLoading }) {
             <p>
               Not yet member?<Link to="/register">Register</Link>
             </p>
-          </div>
-
-          <div className={style.button}>
-            <div className={style["loginButton-google"]} onClick={google}>
-              <img src="../../../images/Icon/google.png" alt="icon" />
-              <span className={style.text}>Sign in with email</span>
-            </div>
-            <div className={style["loginButton-facebook"]} onClick={facebook}>
-              <img src="../../../images/Icon/facebook.png" alt="icon" />
-              <span className={style.text1}>Sign in with Facebook</span>
-            </div>
           </div>
         </div>
       </form>
