@@ -29,7 +29,7 @@ function NewManufacture({ inputs, title, isFile,setLoading }) {
       nameCategory:info.nameCategory
     }
     try {
-      const {data} = await axiosClient.post(`/manufacture`,newManufacture);
+      const data = await axiosClient.post(`/manufacture`,newManufacture);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER

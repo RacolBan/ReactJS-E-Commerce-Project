@@ -21,7 +21,8 @@ function ViewUser({ title, isFile,setLoading }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const { data } = await axiosClient.get(`/user/${param.id}/getInfor/admin`);
+        const  data  = await axiosClient.get(`/user/${param.id}/getInfor/admin`);
+        console.log(data)
         if (data.User) {
           setUsername(data.User.username);
           setFirstName(data.User.firstName);
@@ -50,7 +51,7 @@ function ViewUser({ title, isFile,setLoading }) {
     setLoading(true)
     e.preventDefault();
     try {
-      const { data } = await axiosClient.put(`/user/${param.id}/updateInfor/admin`,userUpdate);
+      const  data  = await axiosClient.put(`/user/${param.id}/updateInfor/admin`,userUpdate);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER
@@ -75,7 +76,7 @@ function ViewUser({ title, isFile,setLoading }) {
               <img
                 src={
                   file
-                    ? `${file}`
+                    ? `${process.env.REACT_APP_SERVER_URL}/assets/${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 alt="images"

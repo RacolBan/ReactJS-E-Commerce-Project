@@ -14,7 +14,8 @@ function ListOrders({ columns, title }) {
   const getOrder = async () => {
     if (login) {
       try {
-        const { data } = await axiosClient.get(`/order`);
+        const  data  = await axiosClient.get(`/order`);
+        console.log(data)
         setOrders(data);
       } catch (error) {
         toast.error(error.response.data.message, {

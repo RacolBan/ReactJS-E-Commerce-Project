@@ -68,7 +68,7 @@ function Profile({setLoading}) {
 
         newAvatar.append("file", file);
         try {
-          const { data } = await axiosClient.put(`/user/upload/${user.userId}/users`,newAvatar);
+          const  data  = await axiosClient.put(`/user/upload/${user.userId}/users`,newAvatar);
           setUser({ ...user, avatar: data.avatar });
           toast.success("Update successfully", {
             position: toast.POSITION.TOP_CENTER,
@@ -92,7 +92,7 @@ function Profile({setLoading}) {
                 src={
                   user.avatar === null
                     ? "../../../../images/Avatar/avatar.jpg"
-                    : `${process.env.REACT_APP_SERVER_URL}/${user.avatar}`
+                    : `${process.env.REACT_APP_SERVER_URL}/assets/${user.avatar}`
                 }
                 alt="avatar"
               />
@@ -123,7 +123,7 @@ function Profile({setLoading}) {
                   <div className={style["profile-right-body-name"]}>
                     Username:
                   </div>
-                  <div className={style["profile-right-body-info"]}>
+                  <div className={style["profile-right-body-info-disable"]} disabled={true}>
                     {user.username}
                   </div>
                 </div>
@@ -168,7 +168,7 @@ function Profile({setLoading}) {
                 </div>
                 <div className={style["profile-right-body-infomation"]}>
                   <div className={style["profile-right-body-name"]}>Email:</div>
-                  <div className={style["profile-right-body-info"]}>
+                  <div className={style["profile-right-body-info-disable"]}>
                     <input
                       disabled
                       type="text"
@@ -211,7 +211,7 @@ function Profile({setLoading}) {
                   src={
                     user.avatar === null
                       ? "../../../../images/Avatar/avatar.jpg"
-                      : `${process.env.REACT_APP_SERVER_URL}/${user.avatar}`
+                      : `${process.env.REACT_APP_SERVER_URL}/assets/${user.avatar}`
                   }
                   alt="avatar"
                 />

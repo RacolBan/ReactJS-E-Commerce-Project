@@ -11,14 +11,13 @@ function Header() {
   const nav = useNavigate();
   const searchRef = useRef(0);
   const handleSearch = () => {
-    const value = searchRef.current.valueOf;
+    const value = searchRef.current.value;
     nav(value ? `/search/?query=${value}` : '/search');
-    searchRef.current.valueOf = "";
+    searchRef.current.value = "";
   };
   const user = state.UserAPI.user[0];
   const handleLogout = () => {
-    localStorage.removeItem("login");
-    localStorage.removeItem("token");
+    localStorage.clear();
     setIsLogged(false);
     toast.success("Logout successfully", {
       position: toast.POSITION.TOP_CENTER,
@@ -62,7 +61,7 @@ function Header() {
                   src={
                     user.avatar === null
                       ? "../../../../images/Avatar/avatar.jpg"
-                      : `${process.env.REACT_APP_SERVER_URL}/${user.avatar}`
+                      : `${process.env.REACT_APP_SERVER_URL}/assets/${user.avatar}`
                   }
                   alt="avatar"
                 />

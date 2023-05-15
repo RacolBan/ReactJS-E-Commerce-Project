@@ -4,12 +4,18 @@ import App from './App';
 import './index.css';
 import './grid.css';
 import "react-toastify/ReactToastify.min.css";
+import { DataProvider } from 'GlobalState';
+import { BrowserRouter } from 'react-router-dom';
 
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App />
+    <DataProvider>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </DataProvider>
 );
 
 

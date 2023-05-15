@@ -48,26 +48,37 @@ function Apple({handleAddProducts}) {
   return (
     <div className={style.wrapper}>
       <div className={style.head}>
-        <h3>Apple Center</h3>
-        <Link to={`/category/2`}>
+        <h3>ACCESSORIES</h3>
+        <Link to={`/category/6`}>
           See all
           <i className="fa fa-angle-double-right"></i>
         </Link>
       </div>
       <Slider {...settings}>
-        {productsApple?.map((product, index) => (
-          <div className={style.item} key={index}>
-            <Link to={`/detail/${product.id}`} className={style["item-image"]}>
-              <img src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`} alt="Apple" />
-            </Link>
-            <span className={style["item-manufactory"]}>
-              <img src='./images/Manufactory/apple.png' alt="" />
-            </span>
-            <h4 className={style["item-name"]}>{product.name}</h4>
-            <span className={style["item-price"]}>${product.price}</span>
-            <span className={style["btn-addCart"]} onClick={()=>{handleAddProducts(product)}}>Add To Cart</span>
-          </div>
-        ))}
+        {productsApple?.map((product, index) => {
+          return (
+            <div className={style.item} key={index}>
+              <Link to={`/detail/${product.id}`} className={style["item-image"]}>
+                <img src={`${process.env.REACT_APP_SERVER_URL}/assets/${product.image}`} alt="mouse" />
+              </Link>
+              <div className={style['flex']}>
+                
+                <span className={style["item-manufactory"]}>
+                { 
+                product.categoryId === 6 
+                ? <img src='./images/Icon/mouse.png' alt="" /> 
+                : <img src='./images/Icon/keyboard.png' alt="" />
+                }
+                </span>
+                
+            
+                <h4 className={style["item-name"]}>{product.name}</h4>
+              </div>
+              <span className={style["item-price"]}>${product.price}</span>
+              <span className={style["btn-addCart"]} onClick={()=>{handleAddProducts(product)}}>Add To Cart</span>
+            </div>
+          )
+        })}
       </Slider>
     </div>
   );

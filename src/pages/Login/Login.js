@@ -11,7 +11,7 @@ function Login({ setLoading }) {
   const [,setIsLogged] = state.UserAPI.isLogged;
   const [,setIsAdmin] = state.UserAPI.isAdmin;
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("123456");
   const user = {
     username,
     password,
@@ -21,7 +21,7 @@ function Login({ setLoading }) {
     setLoading(true);
     e.preventDefault();
     try {
-      const { data } = await axiosClient.post('/account/login', user);
+      const data  = await axiosClient.post('/account/login', user);
       const login = {
         accesstoken: data.accesstoken,
         accountId: data.id,
@@ -40,7 +40,7 @@ function Login({ setLoading }) {
           await axiosClient.post(`/cart/user/${login.userId}/products`, products);
         } catch (error) {
           toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_CENTER
+            position: toast.POSITION.TOP_LEFT
           });
         }
       };
@@ -51,14 +51,14 @@ function Login({ setLoading }) {
         toast.success("Login successfully !", {
           position: toast.POSITION.TOP_CENTER,
         });
-        return nav("/admin");
+        nav("/admin");
       } else {
         setIsLogged(true);
         setLoading(false);
         toast.success("Login successfully !", {
           position: toast.POSITION.TOP_CENTER,
         });
-        return nav("/");
+        nav("/");
       }
     } catch (error) {
       setLoading(false);
@@ -96,9 +96,9 @@ function Login({ setLoading }) {
             name="password"
             id="password"
             required
-            value={password}
+            value={'123456'}
             onChange={(e) => {
-              setPassword(e.target.value);
+              setPassword('123456');
             }}
             spellCheck="false"
           />

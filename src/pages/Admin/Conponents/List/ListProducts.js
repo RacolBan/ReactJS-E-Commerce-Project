@@ -14,7 +14,7 @@ function ListProducts({ columns, title,setLoading }) {
   const getProducts = async () => {
     if (login) {
       try {
-        const { data } = await axiosClient.get(`/product/getAll`);
+        const  data  = await axiosClient.get(`/product/getAll`);
         setProductsAll(data)
       } catch (error) {
         toast.error(error.response.data.message, {
@@ -57,7 +57,7 @@ function ListProducts({ columns, title,setLoading }) {
   const handleDelete = async (id) => {
     setLoading(true)
     try {
-      const { data } = await axiosClient.delete(`/product/${id}`);
+      const  data  = await axiosClient.delete(`/product/${id}`);
       setLoading(false)
       setIsDlt(!isDlt)
       toast.success(data.message, {

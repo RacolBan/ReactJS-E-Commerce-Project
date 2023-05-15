@@ -21,7 +21,7 @@
   max-width: 100%;
   height: auto;
   object-fit: cover;
-  vertical-align: center;
+  width: 50%;
 }
 .container-right {
   padding-right: 30px;

@@ -27,7 +27,7 @@ function NewCategory({ inputs, title, isFile,setLoading }) {
       name: info.name,
     };
     try {
-      const { data } = await axiosClient.post(`/category`,newCategory);
+      const data  = await axiosClient.post(`/category`,newCategory);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER,

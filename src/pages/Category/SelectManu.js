@@ -11,7 +11,7 @@ const SelectManu = ({ page, categoryId,sort }) => {
   useEffect(() => {
     const getManufacture = async () => {
       try {
-        const { data } = await axiosClient.get(
+        const data  = await axiosClient.get(
           `/manufacture/category/${categoryId}`
         );
         setManufacture(data);

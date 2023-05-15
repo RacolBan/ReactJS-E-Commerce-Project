@@ -12,7 +12,7 @@ function Category({ handleAddProducts }) {
   const params = useParams();
   const [products, setProducts] = useState([]);
   const { search } = useLocation();
-  const [limit, setLimit] = useState(5);
+  const limit = 5;
   const [totalPages, setToTalPages] = useState(0);
 
   const { page, manufacture, sort } = useMemo(() => {
@@ -29,8 +29,15 @@ function Category({ handleAddProducts }) {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const { data } = await axiosClient.get(
-          `/product/pagination/category/${params.id}?manufacture=${manufacture}&limit=${limit}&page=${page}&sort=${sort}`
+        const  data  = await axiosClient.get(
+          `/product/pagination/category/${params.id}`,{
+            params: {
+              manufacture,
+              limit,
+              page,
+              sort
+            }
+          }
         );
         const total = Math.ceil(data.count / limit);
         setToTalPages(total);

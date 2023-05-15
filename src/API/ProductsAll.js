@@ -8,7 +8,7 @@ function ProductsAll() {
   const [productsAll, setProductsAll] = useState([]);
   const getProducts = async () => {
     try {
-      const { data } = await axiosClient.get('/product/getAll');
+      const  data  = await axiosClient.get('/product/getAll');
       setProductsAll(data);
     } catch (error) {
       toast.error(error.response.data.message, {

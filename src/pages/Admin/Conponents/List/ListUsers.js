@@ -13,7 +13,8 @@ function ListUsers({ columns, title,setLoading }) {
   const getUsers = async () => {
     try {
       if (login) {
-        const { data } = await axiosClient.get(`/user/getAll`);
+        const  data  = await axiosClient.get(`/user/getAll`);
+        console.log(data)
         setUsersAll(data);
       }
     } catch (error) {

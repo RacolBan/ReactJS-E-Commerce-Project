@@ -81,48 +81,49 @@ function Register({ setLoading }) {
           }
           break;
 
-        case "phone":
-          if (!value) {
-            stateObj[name] = "Please enter phone.";
-          } else if (!regexPhone.test(value)) {
-            stateObj[name] = "Phone required 10 digit numbers";
-          }
-          break;
+        // case "phone":
+        //   if (!value) {
+        //     stateObj[name] = "Please enter phone.";
+        //   } else if (!regexPhone.test(value)) {
+        //     stateObj[name] = "Phone required 10 digit numbers";
+        //   }
+        //   break;
 
-        case "address":
-          if (!value) {
-            stateObj[name] = "Please enter Address.";
-          } else if (value.length < 3) {
-            stateObj[name] =
-              "Address required number of characters must be between 3 to 50";
-          } else if (value.length > 50) {
-            stateObj[name] =
-              "Address required number of characters must be between 3 to 50";
-          }
-          break;
+        // case "address":
+        //   if (!value) {
+        //     stateObj[name] = "Please enter Address.";
+        //   } else if (value.length < 3) {
+        //     stateObj[name] =
+        //       "Address required number of characters must be between 3 to 50";
+        //   } else if (value.length > 50) {
+        //     stateObj[name] =
+        //       "Address required number of characters must be between 3 to 50";
+        //   }
+        //   break;
 
         case "email":
           if (!value) {
             stateObj[name] = "Please enter Email.";
-          } else if (!regexEmail.test(value)) {
-            stateObj[name] = "Invalid Email";
           }
+        //   } else if (!regexEmail.test(value)) {
+        //     stateObj[name] = "Invalid Email";
+        //   }
           break;
 
-        case "password":
-          if (!value) {
-            stateObj[name] = "Please enter Password.";
-          } else if (value.length < 6) {
-            stateObj[name] = "Password required more than 6 letters";
-          } else if (input.confirmPassword && value !== input.confirmPassword) {
-            stateObj["confirmPassword"] =
-              "Password and Confirm Password does not match.";
-          } else {
-            stateObj["confirmPassword"] = input.confirmPassword
-              ? ""
-              : error.confirmPassword;
-          }
-          break;
+        // case "password":
+        //   if (!value) {
+        //     stateObj[name] = "Please enter Password.";
+        //   } else if (value.length < 6) {
+        //     stateObj[name] = "Password required more than 6 letters";
+        //   } else if (input.confirmPassword && value !== input.confirmPassword) {
+        //     stateObj["confirmPassword"] =
+        //       "Password and Confirm Password does not match.";
+        //   } else {
+        //     stateObj["confirmPassword"] = input.confirmPassword
+        //       ? ""
+        //       : error.confirmPassword;
+        //   }
+        //   break;
 
         case "confirmPassword":
           if (!value) {
@@ -141,23 +142,21 @@ function Register({ setLoading }) {
   };
   const user = {
     username: input.username,
-    password: input.password,
-    firstName: input.firstname,
-    lastName: input.lastname,
-    address: input.address,
-    phone: input.phone,
-    email: input.email
+    password: '123456',
+    firstName: 'khai',
+    lastName: 'nguyen',
+    address: 'abc',
+    phone: `09036778${input.phone}`,
+    email: `${input.email}${'@gmail.com'}`
   };
   const registerSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
     await axiosClient.post('/user/accounts/createProfile', user);
-      console.log('a');
       toast.success("Register successfully", {
         position: toast.POSITION.TOP_CENTER,
       });
-      console.log('aaa')
       return nav('/login');
     } catch (error) {
       setLoading(false)
@@ -178,7 +177,7 @@ function Register({ setLoading }) {
               type="text"
               name="firstname"
               placeholder="Enter Firstname"
-              value={input.firstname}
+              value={'khai'}
               onChange={onInputChange}
               onBlur={validateInput}
               spellCheck="false"
@@ -192,7 +191,7 @@ function Register({ setLoading }) {
               type="text"
               name="lastname"
               placeholder="Enter Lastname"
-              value={input.lastname}
+              value={'nguyen'}
               onChange={onInputChange}
               onBlur={validateInput}
               spellCheck="false"
@@ -276,7 +275,7 @@ function Register({ setLoading }) {
               type="password"
               name="confirmPassword"
               placeholder="Enter Confirm Password"
-              value={input.confirmPassword}
+              value={'123456'}
               onChange={onInputChange}
               onBlur={validateInput}
               spellCheck="false"

@@ -14,10 +14,9 @@ function DetailProduct({ products, handleAddProducts }) {
     if (params.id) {
       const getOneProduct = async () => {
         try {
-          const { data } = await axiosClient.get(
+          const data  = await axiosClient.get(
             `/product/${params.id}`
           );
-          console.log(data)
           setProductDetail(data.product);
         } catch (error) {
           toast.error(error.response.data.message, {

@@ -59,7 +59,7 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
       if (window.confirm("Do you want to delete this product?")) {
         setLoading(true);
         try {
-          const { data } = await axiosClient.delete(
+          const data  = await axiosClient.delete(
             `/cart/user/${login.userId}/product/${id}`
           );
           cartItems.forEach((item, index) => {
@@ -120,7 +120,7 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
     };
     try {
       if (method === "Ship Cod") {
-        const { data } = await axiosClient.post(
+        const  data  = await axiosClient.post(
           `/payment`,
           newPayment
         );
@@ -130,7 +130,7 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
           position: toast.POSITION.TOP_CENTER,
         });
       } else {
-        const { data } = await axiosClient.post(
+        const  data  = await axiosClient.post(
           `/api/stripe/create-checkout-seasion`,
           newPayment
         );
@@ -145,7 +145,7 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
       });
     }
   };
-
+  console.log(cartItems);
   return (
     <div className={style.cart}>
       {cartItems.length > 0 ? (
@@ -155,7 +155,7 @@ function Cart({ cartItems, setCartItems, setLoading, isPm, setIsPm }) {
               <div className={`${style["list-orders-item"]} `} key={cart.id}>
                 <div className={`${style["list-orders-item-img"]} `}>
                   <img
-                    src={`/${cart.image}`}
+                    src={`${process.env.REACT_APP_SERVER_URL}/assets/${cart.image}`}
                     alt="images"
                   />
                 </div>

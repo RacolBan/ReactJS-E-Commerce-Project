@@ -52,7 +52,7 @@ function ChangePassword({setLoading}) {
                 src={
                   user.avatar === null
                     ? "./images/Avatar/avatar.jpg"
-                    : `${user.avatar}`
+                    : `${process.env.REACT_APP_SERVER_URL}/assets/${user.avatar}`
                 }
                 alt="avatar"
               />

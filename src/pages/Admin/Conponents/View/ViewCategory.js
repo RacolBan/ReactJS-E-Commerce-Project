@@ -16,7 +16,7 @@ function ViewCategory({ title, isFile,setLoading }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const {data} =  await axiosClient.get(
+        const data =  await axiosClient.get(
           `/category/${param.id}`);
 
         if(data) {

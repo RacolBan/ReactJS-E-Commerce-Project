@@ -19,7 +19,7 @@ function ViewProduct({ title, isFile,setLoading }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const {data} =  await axiosClient.get(
+        const data =  await axiosClient.get(
           `${process.env.REACT_APP_SERVER_URL}/product/${param.id}`,
           {
             headers: {
@@ -82,7 +82,7 @@ function ViewProduct({ title, isFile,setLoading }) {
               <img
                 src={
                   file
-                    ? `${process.env.REACT_APP_SERVER_URL}/${file}`
+                    ? `${process.env.REACT_APP_SERVER_URL}/assets/${file}`
                     : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 alt="images"

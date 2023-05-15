@@ -51,6 +51,7 @@
 
 .profile-left-body-info {
   padding-bottom: 15px;
+  
 }
 
 .profile-left-body-info i {
@@ -125,6 +126,13 @@
 .profile-right-body-info {
   width: 80%;
   font-size: 20px;
+  background-color: white;
+  
+}
+.profile-right-body-info-disable {
+  width: 80%;
+  font-size: 20px;
+  background-color: none;
 }
 
 .profile-right-body-info input {

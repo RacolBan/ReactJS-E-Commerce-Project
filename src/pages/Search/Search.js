@@ -16,8 +16,11 @@ function Search({ handleAddProducts }) {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const { data } = await axiosClient.get(
-          `/product/search?query=${query}`
+        const  data  = await axiosClient.get(
+          `/product/search`,
+          {params:{
+            query
+          }}
         );
         setShowResult(data.foundProducts);
       } catch (error) {
@@ -41,21 +44,11 @@ function Search({ handleAddProducts }) {
                   className={style["item-image"]}
                 >
                   <img
-                    src={`${process.env.REACT_APP_SERVER_URL}/${product.image}`}
+                    src={`${process.env.REACT_APP_SERVER_URL}/assets/${product.image}`}
                     alt="Apple"
                   />
                 </Link>
-                <span className={style["item-manufactory"]}>
-                  {product["manufacture.name"] === "Asus" && (
-                    <img src="../../../images/Manufactory/asus.PNG" alt="" />
-                  )}
-                  {product["manufacture.name"] === "Dell" && (
-                    <img src="../../../images/Manufactory/dell.PNG" alt="" />
-                  )}
-                  {product["manufacture.name"] === "Macbook" && (
-                    <img src="../../../images/Manufactory/apple.PNG" alt="" />
-                  )}
-                </span>
+                
                 <h4 className={style["item-name"]}>{product.name}</h4>
                 <span className={style["item-description"]}>
                   {product.description}

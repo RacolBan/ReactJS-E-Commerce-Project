@@ -6,8 +6,12 @@ function ProductsLaptop() {
   const [productsLaptop, setProductsLaptop] = useState([]);
   const getProducts = async () => {
     try {
-      const {data} = await axiosClient.get(
-        `/product/category/1`
+      const data = await axiosClient.get(
+        `/product/category/laptop`,{
+          params:{
+            name: "laptop"
+          }
+        }
       );
       setProductsLaptop(data);
     } catch (error) {

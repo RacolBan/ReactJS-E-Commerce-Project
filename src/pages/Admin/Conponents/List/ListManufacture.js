@@ -15,7 +15,7 @@ function ListManufacture({ columns, title,setLoading }) {
   const getManufacture = async () => {
     if (login) {
       try {
-        const { data } = await axiosClient.get(`/manufacture`);
+        const  data  = await axiosClient.get(`/manufacture`);
         setManufactureAll(data);
       } catch (error) {
         toast.error(error.response.data.message, {

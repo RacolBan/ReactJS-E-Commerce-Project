@@ -8,8 +8,7 @@ export const DataProvider = ({ children }) => {
   const state = {
     ProductsLaptop: ProductsLaptop(),
     ProductsApple: ProductsApple(),
-    UserAPI: UserAPI(),
-    
+    UserAPI: UserAPI()
   };
   return <GlobalState.Provider value={state}>{children}</GlobalState.Provider>;
 };

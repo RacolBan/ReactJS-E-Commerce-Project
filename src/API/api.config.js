@@ -10,13 +10,18 @@ axiosClient.interceptors.request.use(request => {
    request.headers.Authorization = accessToken;
  }
   return request;
-}, async error => {
-  return await Promise.reject(error);
+}, error => {
+  return Promise.reject(error);
 });
-// axiosClient.interceptors.response.use(async res => {
-//   return await Promise.resolve(res);
-// }, async err => {
- 
-//   return await Promise.reject(err);
-// });
+axiosClient.interceptors.response.use(
+  (response) => {
+      if (response && response.data) {
+          return response.data;
+      }
+      return response;
+  },
+  error => {
+      throw error;
+  }
+);
 export default axiosClient;

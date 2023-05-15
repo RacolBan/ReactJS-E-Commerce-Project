@@ -49,13 +49,13 @@ function Laptop({handleAddProducts}) {
     <div className={style.wrapper}>
       <div className={style.head}>
         <h3>Laptop</h3>
-        <Link to={`/category/1`}>
+        <Link to={`/category/5`}>
           See all
           <i className="fa fa-angle-double-right"></i>
         </Link>
       </div>
       <Slider {...settings}>
-        {productsLaptop.map((product, index) => (
+        {productsLaptop && productsLaptop.map((product, index) => (
           //
           <div className={style.item} key={index}>
             <Link to={`/detail/${product.id}`} className={style["item-image"]}>
@@ -65,9 +65,9 @@ function Laptop({handleAddProducts}) {
               />
             </Link>
             <span className={style["item-manufactory"]}>
-              {product.nameManufacture === "Asus" && (
+              {product.nameManufacture === "Asus" && 
                 <img src="../../../images/Manufactory/asus.PNG" alt="" />
-              )}
+              }
               {product.nameManufacture === "Dell" && (
                 <img src="../../../images/Manufactory/dell.PNG" alt="" />
               )}

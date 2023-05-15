@@ -63,12 +63,10 @@
   top: 50%;
   transform: translateY(-50%) translateX(-50%) scale(80%);
   max-width: 100%;
-  max-height: 100%;
   transition: 0.5s ease-in-out;
-  float: left;
-  vertical-align: middle;
-  border: 0;
   height: auto;
+  width: 54%;
+  border-radius: 12px;
 }
 
 .item-manufactory {
@@ -119,4 +117,13 @@
 .btn-addCart:hover {
   opacity: 1;
 }
+.flex{
+  display: flex;
+  
+}
+.flex img{
+  height: auto;
+  width: 29px;
+  position: relative;
 
+}

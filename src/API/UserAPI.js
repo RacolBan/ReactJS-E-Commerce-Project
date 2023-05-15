@@ -20,7 +20,8 @@ function UserAPI() {
     if (login) {
       const getUser = async () => {
         try {
-          const { data } = await axiosClient.get(`/user/${login.accountId}/getInfor`);
+          const data  = await axiosClient.get(`/user/${login.accountId}/getInfor`);
+          console.log(data)
           if (data.inforUser.avatar === null) {
             setUser({
               address: data.inforUser.address,

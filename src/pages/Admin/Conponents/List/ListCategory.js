@@ -14,11 +14,11 @@ function ListCategory({ columns, title,setLoading }) {
   const getCategory = async () => {
     if (login) {
       try {
-        const { data } = await axiosClient.get(`/category`);
+        const data  = await axiosClient.get(`/category`);
         setCategoryAll(data);
       } catch (error) {
         toast.error(error.response.data.message, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
       }
     }
@@ -56,7 +56,7 @@ function ListCategory({ columns, title,setLoading }) {
   const handleDelete = async (id) => {
     setLoading(true)
     try {
-      const {data} = await axiosClient.delete(
+      const data = await axiosClient.delete(
         `/category/${id}`);
       setDlt(!isDlt)
       setLoading(false)

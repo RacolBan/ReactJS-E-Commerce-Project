@@ -10,15 +10,8 @@ function OrderDetail({ close, id }) {
     if (login) {
       const getData = async () => {
         try {
-          const { data } = await axiosClient.get(
-            `/orderDetail/order/${id}`,
-            {
-              headers: {
-                "access-token":
-                  "Bearer " +
-                  JSON.parse(localStorage.getItem("login")).accesstoken,
-              },
-            }
+          const  data  = await axiosClient.get(
+            `api/orderDetail/${id}`
           );
           setProducts(data);
         } catch (error) {
@@ -67,7 +60,7 @@ function OrderDetail({ close, id }) {
                   </td>
                   <td className={`col l-1`}>
                     <img
-                      src={`${process.env.REACT_APP_SERVER_URL}/assets/${product["product.image"]}`}
+                      src={`${process.env.REACT_APP_SERVER_URL}/assets/${product.image}`}
                       alt='product'
                     />
                   </td>

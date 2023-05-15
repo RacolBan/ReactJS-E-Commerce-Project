@@ -71,9 +71,9 @@ export const columnsProducts = [
             src={
               params.row.image === null
                 ? "../../../../images/Avatar/avatar.jpg"
-                : `${process.env.REACT_APP_SERVER_URL}/${params.row.image}`
+                : `${process.env.REACT_APP_SERVER_URL}/assets/${params.row.image}`
             }
-            alt="image"
+            alt="imagess"
           />
         </div>
       );

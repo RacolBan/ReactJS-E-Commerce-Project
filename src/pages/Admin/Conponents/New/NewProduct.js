@@ -32,7 +32,7 @@ function NewProduct({ inputs, title, isFile,setLoading }) {
     newProduct.append("nameManufacture", info.manufacture);
     newProduct.append("nameCategory", info.category);
     try {
-      const {data} = await axiosClient.post(`/product`,newProduct);
+      const data = await axiosClient.post(`/product`,newProduct);
       setLoading(false)
       toast.success(data.message, {
         position: toast.POSITION.TOP_CENTER

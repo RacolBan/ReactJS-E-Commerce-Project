@@ -7,7 +7,7 @@ import { GlobalState } from "../GlobalState";
 function UsersAll() {
   const state = useContext(GlobalState);
   const isAdmin = state.UserAPI.isAdmin;
-  const login = JSON.parse(localStorage.getItem("login")) || null;
+  // const login = JSON.parse(localStorage.getItem("login")) || null;
   const [usersAll, setUsersAll] = useState([]);
   const getUsers = async () => {
     try {

@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { DataProvider } from "./GlobalState";
+import { Routes, Route } from "react-router-dom";
+import {  GlobalState } from "./GlobalState";
 import DefaultLayout from "./Layout/DefaultLayout/DefaultLayout";
 import Admin from "./pages/Admin/Admin";
 import Home from "./pages/Home/Home";
@@ -46,6 +46,9 @@ import Search from "./pages/Search/Search";
 import ListOrders from "./pages/Admin/Conponents/List/ListOrders";
 // import FadeLoader from "react-spinners/FadeLoader";
 import Checkout from "./components/Checkout/Checkout";
+import { useContext } from "react";
+import NotFound from "pages/Not Found/notFound";
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [categoryAll, setCategoryAll] = useState([]);
@@ -54,7 +57,9 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [isPm, setIsPm] = useState(false);
   const login = JSON.parse(localStorage.getItem("login")) || null;
-  console.log(login)
+  const state = useContext(GlobalState);
+  const nav = useNavigate();
+  const [isAdmin] = state.UserAPI.isAdmin;
   // const override = {
   //   display: "block",
   //   margin: "0 auto",
@@ -64,7 +69,7 @@ function App() {
     if (login) {
       const getCart = async () => {
         try {
-          const { data } = await axiosClient.get(
+          const  data  = await axiosClient.get(
             `/cart/user/${login.userId}`
           );
           setCartItems(data.newCarts);
@@ -91,7 +96,7 @@ function App() {
       });
       if (findExxist >= 0) {
         try {
-          const { data } = await axiosClient.put(
+          const  data  = await axiosClient.put(
             `/cart/user/${login.userId}/product/${product.id}`
           );
 
@@ -162,18 +167,21 @@ function App() {
 
   useEffect(() => {
     const getCategory = async () => {
-      const { data } = await axiosClient.get(
+      const data  = await axiosClient.get(
         '/category'
       );
       setCategoryAll(data);
     };
     getCategory();
   }, []);
+  useEffect(() => {
+    isAdmin ? nav('/admin') : nav('/');
+  },[isAdmin]);
 
   const Layout = DefaultLayout;
   const LayoutAdmin = AdminLayout;
   return (
-    <DataProvider>
+    <>
       {/* {loading ? (
         <FadeLoader
           color="red"
@@ -182,9 +190,8 @@ function App() {
           size={150}
         />
       ) : ( */}
-        <Router>
           <Routes>
-            <Route
+              <Route
               path="/"
               element={
                 <Layout cartItems={cartItems} setCartItems={setCartItems}>
@@ -195,6 +202,7 @@ function App() {
                 </Layout>
               }
             />
+            <Route path='*' element={<NotFound/>}/>
             <Route
               path="/register"
               element={
@@ -292,6 +300,9 @@ function App() {
                 </Layout>
               }
             />
+            { isAdmin 
+            &&
+            <>
             <Route
               path="/admin"
               element={
@@ -300,6 +311,7 @@ function App() {
                 </LayoutAdmin>
               }
             />
+
             <Route path="admin/users">
               <Route
                 index
@@ -313,6 +325,7 @@ function App() {
                   </LayoutAdmin>
                 }
               />
+            
               <Route
                 path="new"
                 element={
@@ -339,6 +352,7 @@ function App() {
                 }
               />
             </Route>
+            
             <Route path="admin/products">
               <Route
                 index
@@ -467,11 +481,11 @@ function App() {
                 }
               />
             </Route>
+            </> }
           </Routes>
-        </Router>
-      {/* )} */}
       <ToastContainer position="top-center" newestOnTop />
-    </DataProvider>
+      {/* )} */}
+    </>
   );
 }
 
